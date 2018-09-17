@@ -1,0 +1,22 @@
+.transparent {
+    background-color: rgba(255,255,255,0.4);
+    top: -3.5em;
+    position: relative;
+    left: -4em;
+}
+
+.mainTitle {
+    color: black;
+    padding-top: 0.5em;
+    text-align: left;
+    font-size: 1em;
+    padding-left: 0.5em;
+}
+
+.text {
+    color: black;
+    text-align: left;
+    font-size: 0.8em;
+    padding-left: 0.7em;
+    font-weight: 700;
+}
