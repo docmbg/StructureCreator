@@ -1,0 +1,325 @@
+.testClass {
+  color: blue;
+  font-size: 2em;
+  font-weight: 600; }
+
+.container {
+  padding: 10%; }
+
+.topBanner {
+  position: relative;
+  top: 0;
+  height: 25%;
+  max-width: 100%; }
+
+.ready {
+  cursor: pointer; }
+  .ready span {
+    display: block;
+    font-weight: 600;
+    padding: 0.5em; }
+  .ready > li > i {
+    color: black; }
+
+li.tooltipped {
+  border: 2px solid #ffdd00;
+  border-radius: 2em;
+  padding: 5px;
+  width: 4em;
+  height: 4em;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 5;
+  margin: 0 1em; }
+  li.tooltipped .material-icons {
+    font-size: 2.5em;
+    color: white; }
+
+.ready > .tooltipped .material-icons {
+  font-size: 2.5em;
+  color: black; }
+
+.material-icons {
+  cursor: pointer; }
+
+h4 div {
+  margin-left: 7.5em;
+  margin-top: -1em;
+  cursor: pointer; }
+
+p {
+  font-size: 1.5em; }
+  p .material-icons {
+    vertical-align: middle; }
+
+.container {
+  padding: 0% !important; }
+
+.title {
+  position: absolute;
+  left: 80%;
+  width: 20%;
+  top: 1em; }
+  .title .material-icons {
+    color: #ff009d;
+    position: relative;
+    top: -0.5em;
+    font-size: 1em; }
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 5s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: fr;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite; }
+
+@-webkit-keyframes bounce {
+  0%, 100% {
+    webkit-transform: translateY(0);
+    color: #bb00ff; }
+  10% {
+    webkit-transform: translateY(-5px);
+    color: #00ff9d; }
+  20% {
+    webkit-transform: translateY(0px);
+    color: #bb00ff; }
+  30% {
+    webkit-transform: translateY(-5px);
+    color: #00ff9d; }
+  40% {
+    webkit-transform: translateY(0px);
+    color: #bb00ff; }
+  50% {
+    webkit-transform: translateY(-5px);
+    color: #00ff9d; }
+  60% {
+    webkit-transform: translateY(0px);
+    color: #bb00ff; } }
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    color: #bb00ff; }
+  10% {
+    transform: translateY(-5px);
+    color: #00ff9d; }
+  20% {
+    transform: translateY(0px);
+    color: #bb00ff; }
+  30% {
+    transform: translateY(-5px);
+    color: #00ff9d; }
+  40% {
+    transform: translateY(0px);
+    color: #bb00ff; }
+  50% {
+    transform: translateY(-5px);
+    color: #00ff9d; }
+  60% {
+    transform: translateY(0px);
+    color: #bb00ff; } }
+
+.bounce {
+  -webkit-animation-name: bounce;
+  animation-name: bounce; }
+
+.topNavigation {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  padding: -1%;
+  top: 7em; }
+
+.waves-effect.waves-black .waves-ripple {
+  /* The alpha value allows the text and background color
+    of the button to still show through. */
+  background-color: black; }
+
+.btn-flat {
+  background: black;
+  color: #ffdd00;
+  height: 3em;
+  line-height: 3em; }
+  .btn-flat:hover {
+    background: #ffdd00 !important;
+    color: black !important; }
+
+.btn-floating:hover i {
+  color: black !important; }
+
+.btn, .btn-large {
+  height: 5em;
+  background: black;
+  color: #ffdd00; }
+  .btn:hover, .btn-large:hover {
+    background: #ffdd00 !important;
+    color: black !important; }
+
+li .btn.btn-floating {
+  height: 40px !important; }
+
+.App {
+  text-align: center; }
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px; }
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white; }
+  .App-header .yellow {
+    color: #ffed00; }
+  .App-header .blue {
+    color: #00c9ff; }
+  .App-header .green {
+    color: #64ff00; }
+
+.App-title {
+  font-size: 1.5em; }
+
+.App-intro {
+  font-size: large; }
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.display {
+  display: block; }
+
+.hidden {
+  display: none; }
+
+.progress {
+  position: relative;
+  height: 4px;
+  display: block;
+  width: 20% !important;
+  background-color: black !important;
+  border-radius: 2px;
+  margin: .5rem 0 1rem 0;
+  overflow: hidden;
+  left: 40% !important;
+  margin-top: 20%; }
+
+.progress .indeterminate {
+  background-color: #ffed00 !important; }
+
+select {
+  display: block !important; }
+
+.diagram {
+  width: 80%;
+  height: 80%;
+  position: fixed;
+  top: 20%;
+  left: 10%;
+  background-color: #FFF;
+  display: block; }
+
+.structure.container {
+  padding: 0% !important; }
+
+.structure.row {
+  margin-bottom: 0% !important; }
+
+.dislpayedComponent {
+  display: block; }
+
+.hiddenComponent {
+  display: none; }
+
+.currentStage {
+  position: relative;
+  margin-top: 5%;
+  text-align: center; }
+
+.download {
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1.5em;
+  vertical-align: middle; }
+  .download .material-icons {
+    font-size: 1.1em; }
+
+.info {
+  position: absolute;
+  color: white;
+  top: 1px;
+  left: 1px;
+  z-index: 100;
+  font-size: 3em;
+  cursor: pointer; }
+
+.birthdayPepe {
+  margin-left: 33%;
+  width: 35%; }
+
+.massDeleteUsers {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 40em; }
+  .massDeleteUsers p {
+    font-size: 1em; }
+
+.file-field input.file-path {
+  border-bottom: 1px solid black !important;
+  box-shadow: 0 1px 0 0 black !important; }
+
+.input-field {
+  margin-top: 0rem !important; }
+
+.prefix {
+  line-height: 1.5em; }
+
+.prefix.active {
+  color: #2196f3 !important; }
+
+.siteTitle {
+  font-weight: 600;
+  font-size: 1em; }
+
+.Add {
+  color: #2196f3;
+  cursor: pointer; }
+
+.Remove {
+  color: #f44336;
+  vertical-align: middle;
+  cursor: pointer; }
+
+.groups {
+  text-align: left; }
+
+.col.s6 > img {
+  width: 100%; }
+
+.delimiter {
+  border-bottom: inset; }
+
+input:focus {
+  border-bottom: 1px solid #2196f3 !important;
+  box-shadow: 0 1px 0 0 #2196f3 !important; }
+
+.jss49 {
+  font-size: 1em !important; }
+
+.jss3 {
+  color: #ffed00 !important;
+  font-size: 1em !important;
+  background: black !important; }
+
+.card-content > p {
+  font-size: 1em !important; }
+
+.errorText {
+  color: #f44336;
+  font-weight: 600; }
