@@ -1,6 +1,6 @@
 import { postOptions } from '../consts';
 
-interface ISiteInfo {
+export interface ISiteInfo {
     metadata: any; // { 'type': 'SP.WebCreationInformation' }
     Title: string;
     Url: string;
@@ -8,7 +8,7 @@ interface ISiteInfo {
     UseSamePermissionsAsParentSite: boolean;
 }
 
-interface INavNodeInfo {
+export interface INavNodeInfo {
     metadata: any; // { type: "SP.NavigationNode" }
     IsExternal: boolean;
     Title: string;
@@ -16,16 +16,17 @@ interface INavNodeInfo {
     nodeId?: number;
 }
 
-interface IInfo {
+export interface IInfo {
     mainUrl: string;
     requestDigest: string;
+    parentSite: string;
 }
 
-interface ISite extends IInfo {
+export interface ISite extends IInfo {
     info: ISiteInfo;
 }
 
-interface ITopNavNode extends IInfo {
+export interface ITopNavNode extends IInfo {
     info: INavNodeInfo;
 }
 
