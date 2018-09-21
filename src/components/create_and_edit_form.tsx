@@ -1,8 +1,8 @@
 import * as React from 'react';
-import SiteForm from '../containers/siteForm';
-import LibraryForm from '../containers/libraryForm';
+import SiteForm from '../containers/site_form_create';
+import LibraryForm from '../containers/library_form';
 
-export default class CreateForm extends React.Component<any, any> {
+export default class CreateAndEditForm extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {

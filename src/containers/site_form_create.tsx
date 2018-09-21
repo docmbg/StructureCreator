@@ -3,12 +3,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import addSite from '../actions/add_site_action';
 import { ISite } from '../api/helperFunctions';
+import { ISitesState } from '../reducers/reducer_sites';
 
-class SiteForm extends React.Component<any, any> {
+interface IPropsType {
+    sites: ISitesState;
+    activeSite: string;
+    addSite: Function;
+}
+
+class SiteForm extends React.Component<IPropsType, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            siteName: '',
+            siteTitle: '',
             siteURL: '',
             siteTemplate: '',
             parentSite: '',
@@ -28,14 +35,14 @@ class SiteForm extends React.Component<any, any> {
             requestDigest: '',
             info: {
                 metadata: { 'type': 'SP.WebCreationInformation' },
-                Title: this.state.siteName,
+                Title: this.state.siteTitle,
                 Url: this.state.siteURL,
                 WebTemlate: this.state.siteTemplate,
                 UseSamePermissionsAsParentSite: true,
             }
 
         };
-        this.props.addSite(site);
+        this.props.addSite(site, this.state.Title);
         this.setState({
             siteName: '',
             siteURL: '',
@@ -49,29 +56,36 @@ class SiteForm extends React.Component<any, any> {
         return (
             <div>
                 Site Name
-                <input 
-                    value={state.siteName} 
-                    onChange={(e) => this.onInputChange('siteName', e.target.value)} 
+                <input
+                    value={state.siteTitle}
+                    onChange={(e) => this.onInputChange('siteTitle', e.target.value)}
                 />
                 Site URL
-                <br/>
+                <br />
                 {`https://mainUrl/`}
-                <input 
-                    value={state.siteURL} 
-                    onChange={(e) => this.onInputChange('siteURL', e.target.value)} 
+                <input
+                    value={state.siteURL}
+                    onChange={(e) => this.onInputChange('siteURL', e.target.value)}
                 />
                 Site Template
                 <select />
 
                 Parent Site
-                <select 
+                <select
                     value={state.parentSite}
                     onChange={(e) => this.onInputChange('parentSite', e.target.value)}
                 >
-                    <option value=""/>
+                    <option value="" />
                     {
-                        this.props.sites.map((site: ISite, i: number) => {
-                            return <option key={i} value={site.info.Title}>{site.info.Title}</option>;
+                        this.props.sites.byTitle.map((title: string, i: number) => {
+                            return (
+                                <option
+                                    key={i}
+                                    value={title}
+                                >
+                                    {title}
+                                </option>
+                            );
                         })
                     }
                 </select>
@@ -82,9 +96,14 @@ class SiteForm extends React.Component<any, any> {
     }
 }
 
-function mapStateToProps({ sites }: any) {
+function mapStateToProps(state: any) {
+    let sites: ISitesState = {
+        byTitle: state.sites.byTitle,
+        byHash: state.sites.byHash
+    };
     return {
-        sites
+        sites,
+        activeSite: state.activeSite
     };
 }
 

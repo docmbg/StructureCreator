@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ISite } from '../api/helperFunctions';
+import SiteBadge from '../containers/site_badge';
 
 export default class SubsitesContainer extends React.Component<any, any> {
     constructor(props: any) {
@@ -12,11 +13,7 @@ export default class SubsitesContainer extends React.Component<any, any> {
                 {
                     this.props.data.map((site: ISite, i: number) => {
                         return (
-                            <div key={i}>
-                                <p>{site.info.Title}</p>
-                                <p>{site.info.Url}</p>
-                            </div>
-
+                            <SiteBadge key={i} site={site} />
                         );
                     })
                 }

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import SubsitesSection from '../components/subsitesSection';
+import SubsitesSection from '../components/subsites_section';
 import { ISite } from '../api/helperFunctions';
+import { ISitesState } from '../reducers/reducer_sites';
 
 class Stage extends React.Component<any, any> {
     constructor(props: any) {
@@ -17,10 +18,14 @@ class Stage extends React.Component<any, any> {
     }
 }
 
-function mapStateToProps({ sites, activeSite }: any) {
+function mapStateToProps(state: any) {
+    let sites: ISitesState = {
+        byTitle: state.sites.byTitle,
+        byHash: state.sites.byHash
+    };
     return {
         sites,
-        activeSite
+        activeSite: state.activeSite
     };
 }
 

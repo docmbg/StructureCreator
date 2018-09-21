@@ -10,7 +10,6 @@ class ActiveSite extends React.Component<any, any> {
     }
 
     onInputChange(value: string) {
-        console.log(value);
         this.props.setActiveSite(value);
     }
 
