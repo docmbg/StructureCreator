@@ -19,7 +19,8 @@ export interface INavNodeInfo {
 export interface IInfo {
     mainUrl: string;
     requestDigest: string;
-    parentSite: string;
+    parentSite: number;
+    Id: number;
 }
 
 export interface ISite extends IInfo {

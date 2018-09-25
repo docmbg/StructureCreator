@@ -18,7 +18,8 @@ class SiteForm extends React.Component<IPropsType, any> {
             siteTitle: '',
             siteURL: '',
             siteTemplate: '',
-            parentSite: '',
+            parentSite: undefined,
+            id: '',
         };
     }
 
@@ -34,13 +35,15 @@ class SiteForm extends React.Component<IPropsType, any> {
             siteName: site.info.Title,
             siteURL: site.info.siteURL,
             siteTemplate: site.info.siteTemplate,
-            parentSite: site.parentSite
+            parentSite: site.parentSite,
+            id: this.props.activeSite,
         });
     }
 
-    onAddButtonClick() {
+    onEditButtonClick() {
         let site: ISite = {
-            parentSite: this.state.parentSite,
+            Id: this.state.id,
+            parentSite: parseInt(this.state.parentSite, 10),
             mainUrl: '',
             requestDigest: '',
             info: {
@@ -81,19 +84,19 @@ class SiteForm extends React.Component<IPropsType, any> {
                 >
                     <option value="" />
                     {
-                        this.props.sites.byTitle.map((title: string, i: number) => {
+                        this.props.sites.byId.map((id: number, i: number) => {
                             return (
                                 <option
                                     key={i}
-                                    value={title}
+                                    value={id}
                                 >
-                                    {title}
+                                    {this.props.sites.byHash[id].info.Title}
                                 </option>
                             );
                         })
                     }
                 </select>
-                <button onClick={() => this.onAddButtonClick()}>Edit</button>
+                <button onClick={() => this.onEditButtonClick()}>Edit</button>
 
             </div>
         );
@@ -102,7 +105,7 @@ class SiteForm extends React.Component<IPropsType, any> {
 
 function mapStateToProps(state: any) {
     let sites: ISitesState = {
-        byTitle: state.sites.byTitle,
+        byId: state.sites.byId,
         byHash: state.sites.byHash
     };
     return {

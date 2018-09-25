@@ -5,7 +5,7 @@ import setActiveSite from '../actions/set_active_site_action';
 import { ISite } from '../api/helperFunctions';
 
 interface ISIteBadge {
-    setActiveSite: FunctionConstructor;
+    setActiveSite: Function;
     site: ISite;
 }
 
@@ -15,7 +15,7 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
     }
 
     onDivClick() {
-        this.props.setActiveSite(this.props.site.info.Title);
+        this.props.setActiveSite(this.props.site.Id);
     }
 
     render() {

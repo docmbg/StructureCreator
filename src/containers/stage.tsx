@@ -20,7 +20,7 @@ class Stage extends React.Component<any, any> {
 
 function mapStateToProps(state: any) {
     let sites: ISitesState = {
-        byTitle: state.sites.byTitle,
+        byId: state.sites.byId,
         byHash: state.sites.byHash
     };
     return {

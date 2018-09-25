@@ -18,7 +18,7 @@ class SiteForm extends React.Component<IPropsType, any> {
             siteTitle: '',
             siteURL: '',
             siteTemplate: '',
-            parentSite: '',
+            parentSite: undefined,
         };
     }
 
@@ -29,8 +29,10 @@ class SiteForm extends React.Component<IPropsType, any> {
     }
 
     onAddButtonClick() {
+        const newId = (this.props.sites.byId[this.props.sites.byId.length - 1] + 1) || 0;
         let site: ISite = {
-            parentSite: this.state.parentSite,
+            Id: newId,
+            parentSite: parseInt(this.state.parentSite, 10),
             mainUrl: '',
             requestDigest: '',
             info: {
@@ -77,13 +79,13 @@ class SiteForm extends React.Component<IPropsType, any> {
                 >
                     <option value="" />
                     {
-                        this.props.sites.byTitle.map((title: string, i: number) => {
+                        this.props.sites.byId.map((id: number, i: number) => {
                             return (
                                 <option
                                     key={i}
-                                    value={title}
+                                    value={id}
                                 >
-                                    {title}
+                                    {this.props.sites.byHash[id].info.Title}
                                 </option>
                             );
                         })
@@ -98,7 +100,7 @@ class SiteForm extends React.Component<IPropsType, any> {
 
 function mapStateToProps(state: any) {
     let sites: ISitesState = {
-        byTitle: state.sites.byTitle,
+        byId: state.sites.byId,
         byHash: state.sites.byHash
     };
     return {

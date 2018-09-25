@@ -7,34 +7,34 @@ interface ISiteAction {
 }
 
 export interface ISitesState {
-    byTitle: Array<String>;
+    byId: Array<number>;
     byHash: Object;
 }
 
-export default function (state: ISitesState = { byTitle: [], byHash: {} }, action: ISiteAction) {
+export default function (state: ISitesState = { byId: [], byHash: {} }, action: ISiteAction) {
     switch (action.type) {
         case ADD_SITE:
             return {
-                byTitle: [...state.byTitle, action.payload.info.Title],
+                byId: [...state.byId, action.payload.Id],
                 byHash: {
                     ...state.byHash,
-                    [action.payload.info.Title]: action.payload
+                    [action.payload.Id]: action.payload
                 }
             };
         case EDIT_SITE:
-            state.byHash[action.payload.info.Title] = action.payload;
+            state.byHash[action.payload.Id] = action.payload;
             return {
-                byTitle: [...state.byTitle],
+                byId: [...state.byId],
                 byHash: {
                     ...state.byHash
                 }
             };
 
         case REMOVE_SITE:
-            state.byTitle.filter((e: string) => e !== action.payload.info.Title);
-            delete state.byHash[action.payload.info.Title];
+            state.byId.filter((e: number) => e !== action.payload.Id);
+            delete state.byHash[action.payload.Id];
             return {
-                byTitle: [...state.byTitle],
+                byId: [...state.byId],
                 byHash: {
                     ...state.byHash
                 }
