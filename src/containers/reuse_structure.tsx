@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import addSite from '../actions/add_site_action';
+import setSites from '../actions/set_sites_action';
 
 class ReuseStructure extends React.Component<any, any> {
     private fileRef = React.createRef<HTMLInputElement>();
@@ -17,9 +17,8 @@ class ReuseStructure extends React.Component<any, any> {
             const reader = new FileReader();
             reader.onloadend = function (event: any) {
                 const data = JSON.parse(event.target.result);
-                for (let site of data) {
-                    that.props.addSite(site);
-                }
+                console.log(data);
+                that.props.setSites(data);
             };
             reader.readAsText(node[`files`][0]);
         }
@@ -53,7 +52,7 @@ function mapStateToProps({ sites }: any) {
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return bindActionCreators({ addSite }, dispatch);
+    return bindActionCreators({ setSites }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReuseStructure);

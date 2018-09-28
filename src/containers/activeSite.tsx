@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import setActiveSite from '../actions/set_active_site_action';
-import { ISite } from '../api/helperFunctions';
 
 class ActiveSite extends React.Component<any, any> {
     constructor(props: any) {
@@ -10,7 +9,7 @@ class ActiveSite extends React.Component<any, any> {
     }
 
     onInputChange(value: string) {
-        this.props.setActiveSite(value);
+        this.props.setActiveSite(parseInt(value, 10));
     }
 
     render() {
@@ -18,14 +17,22 @@ class ActiveSite extends React.Component<any, any> {
             <div>
             Current Site:
             <select
-                // value={this.props.activeSite}
+                value={this.props.activeSite}
                 onChange={(e) => this.onInputChange(e.target.value)}
             >
                 <option value="" />
                 {
-                    this.props.sites.map((site: ISite, i: number) => {
-                        return <option key={i} value={site.info.Title}>{site.info.Title}</option>;
+                    this.props.sites.byId.map((id: number, i: number) => {
+                        return (
+                            <option
+                                key={i}
+                                value={id}
+                            >
+                                {this.props.sites.byHash[id].info.Title}
+                            </option>
+                        );
                     })
+                }
                 }
             </select>
             </div>

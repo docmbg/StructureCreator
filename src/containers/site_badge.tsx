@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setActiveSite from '../actions/set_active_site_action';
 import { ISite } from '../api/helperFunctions';
+import { Badge } from 'react-materialize';
 
 interface ISIteBadge {
     setActiveSite: Function;
@@ -21,6 +22,7 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
     render() {
         return (
             <div onClick={() => this.onDivClick()}>
+                <Badge >test</Badge>
                 <p>{this.props.site.info.Title}</p>
                 <div>{this.props.site.info.Url}</div>
             </div>

@@ -1,4 +1,4 @@
-import { ADD_SITE, EDIT_SITE, REMOVE_SITE } from '../consts';
+import { ADD_SITE, EDIT_SITE, DELETE_SITE, SET_SITES } from '../consts';
 import { ISite } from '../api/helperFunctions';
 
 interface ISiteAction {
@@ -30,15 +30,28 @@ export default function (state: ISitesState = { byId: [], byHash: {} }, action: 
                 }
             };
 
-        case REMOVE_SITE:
-            state.byId.filter((e: number) => e !== action.payload.Id);
-            delete state.byHash[action.payload.Id];
+        case DELETE_SITE:
+            // delete sites which parent site is this id as well
+            let indexes: Array<number>;
+            for (let key in state.byHash) {
+                if (state.byHash[key].Id === action.payload.Id ||
+                    state.byHash[key].parentSite === action.payload.Id
+                ) {
+                    indexes.push(action.payload.Id);
+                    delete state.byHash[action.payload.Id];
+                }
+            }
+            state.byId.filter((e: number) => !indexes.includes(e));
             return {
                 byId: [...state.byId],
                 byHash: {
                     ...state.byHash
                 }
             };
+        case SET_SITES:
+            console.log(action.payload);
+            return action.payload;
+
         default:
             return state;
     }

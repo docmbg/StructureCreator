@@ -1,9 +1,9 @@
 import * as React from 'react';
 import '../sass/App.css';
 import CreateAndEditForm from '../components/create_and_edit_form';
-// import Stage from './stage';
+import Stage from './stage';
 import ReuseStructure from './reuse_structure';
-// import ActiveSite from './activeSite';
+import ActiveSite from './activeSite';
 
 export default class App extends React.Component<any, any> {
 
@@ -17,7 +17,7 @@ export default class App extends React.Component<any, any> {
       <div className="container">
         <div className="row">
           <div className="col s2">
-            {/* <ActiveSite /> */}
+            <ActiveSite />
           </div>
         </div>
         <div className="row">
@@ -25,7 +25,7 @@ export default class App extends React.Component<any, any> {
             <CreateAndEditForm />
           </div>
           <div className="col s10">
-            {/* <Stage /> */}
+            <Stage />
           </div>
         </div>
         <ReuseStructure />

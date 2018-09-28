@@ -3,7 +3,8 @@
 export const ADD_SITE = 'ADD_SITE';
 export const SET_ACTIVE_SITE = 'SET_ACTIVE_SITE';
 export const EDIT_SITE = 'EDIT_SITE';
-export const REMOVE_SITE = 'REMOVE_SITE';
+export const DELETE_SITE = 'DELETE_SITE';
+export const SET_SITES = 'SET_SITES';
 
 export const readOptions = {
     method: 'GET', // or 'PUT'
