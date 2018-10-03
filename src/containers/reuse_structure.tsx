@@ -10,6 +10,11 @@ class ReuseStructure extends React.Component<any, any> {
         super(props);
     }
 
+    componentDidMount() {
+        // for faster testing
+        this.props.setSites(JSON.parse(localStorage.getItem('structure')));
+    }
+
     readStructure() {
         let that = this;
         const node = this.fileRef.current;

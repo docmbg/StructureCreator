@@ -1,61 +1,53 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import editSite from '../actions/edit_site_action';
+import editSiteContent from '../actions/edit_site_content_action';
 import { ISitesState } from '../reducers/reducer_sites';
 import { ISite } from '../api/helperFunctions';
 
-interface IPropsType {
+interface IEditSite {
+    site: ISite;
+    editSiteContent: Function;
     sites: ISitesState;
-    activeSite: string;
-    editSite: Function;
+    contentActiveSite: ISite;
 }
 
-class SiteForm extends React.Component<IPropsType, any> {
+class SiteEditForm extends React.Component<IEditSite, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            siteTitle: '',
-            siteURL: '',
-            siteTemplate: '',
-            parentSite: undefined,
-            id: '',
+            Id: this.props.contentActiveSite.Id,
+            Title: this.props.contentActiveSite.info.Title,
+            Url: this.props.contentActiveSite.info.Url,
+            WebTemplate: this.props.contentActiveSite.info.WebTemlate,
+            parentSite: this.props.contentActiveSite.parentSite
         };
     }
 
-    onInputChange(prop: string, value: string) {
+    onInputChange(prop: string, value: any) {
         this.setState({
             [prop]: value
         });
-    }
-
-    onComponentDidMount() {
-        const site = this.props.sites.byHash[this.props.activeSite];
-        this.setState({
-            siteName: site.info.Title,
-            siteURL: site.info.siteURL,
-            siteTemplate: site.info.siteTemplate,
-            parentSite: site.parentSite,
-            id: this.props.activeSite,
-        });
-    }
-
-    onEditButtonClick() {
         let site: ISite = {
-            Id: this.state.id,
-            parentSite: parseInt(this.state.parentSite, 10),
+            Id: this.state.Id,
+            parentSite: this.state.parentSite,
             mainUrl: '',
             requestDigest: '',
             info: {
                 metadata: { 'type': 'SP.WebCreationInformation' },
-                Title: this.state.siteName,
-                Url: this.state.siteURL,
-                WebTemlate: this.state.siteTemplate,
+                Title: this.state.Title,
+                Url: this.state.Url,
+                WebTemlate: this.state.WebTemplate,
                 UseSamePermissionsAsParentSite: true,
             }
-
         };
-        this.props.editSite(site);
+        if (site.hasOwnProperty(prop)) {
+            site[prop] = value;
+        } else {
+            site.info[prop] = value;
+        }
+        this.props.editSiteContent(site);
+
     }
 
     render() {
@@ -64,15 +56,15 @@ class SiteForm extends React.Component<IPropsType, any> {
             <div>
                 Site Name
                 <input
-                    value={state.siteTitle}
-                    onChange={(e) => this.onInputChange('siteTitle', e.target.value)}
+                    value={state.Title}
+                    onChange={(e) => this.onInputChange('Title', e.target.value)}
                 />
                 Site URL
                 <br />
                 {`https://mainUrl/`}
                 <input
-                    value={state.siteURL}
-                    onChange={(e) => this.onInputChange('siteURL', e.target.value)}
+                    value={state.Url}
+                    onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
                 Site Template
                 <select />
@@ -80,7 +72,7 @@ class SiteForm extends React.Component<IPropsType, any> {
                 Parent Site
                 <select
                     value={state.parentSite}
-                    onChange={(e) => this.onInputChange('parentSite', e.target.value)}
+                    onChange={(e) => this.onInputChange('parentSite', parseInt(e.target.value, 10))}
                 >
                     <option value="" />
                     {
@@ -96,8 +88,6 @@ class SiteForm extends React.Component<IPropsType, any> {
                         })
                     }
                 </select>
-                <button onClick={() => this.onEditButtonClick()}>Edit</button>
-
             </div>
         );
     }
@@ -108,14 +98,15 @@ function mapStateToProps(state: any) {
         byId: state.sites.byId,
         byHash: state.sites.byHash
     };
+    let contentActiveSite = state.contentActiveSite;
     return {
         sites,
-        activeSite: state.activeSite
+        contentActiveSite
     };
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return bindActionCreators({ editSite }, dispatch);
+    return bindActionCreators({ editSiteContent }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SiteForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SiteEditForm);

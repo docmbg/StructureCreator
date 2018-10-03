@@ -14,12 +14,15 @@
     box-shadow: 3px 3px 0px 1px grey;
     font-weight: 600; }
   .site-badge > .actions {
-    display: none;
-    height: max-content;
-    cursor: pointer; }
-    .site-badge > .actions > i {
-      line-height: 2 !important; }
-  .site-badge:hover .actions {
+    float: left; }
+    .site-badge > .actions > div > i {
+      line-height: 1 !important;
+      margin-top: 10px !important; }
+    .site-badge > .actions > div {
+      display: none;
+      height: max-content;
+      cursor: pointer; }
+  .site-badge:hover .actions > div {
     display: inline-block; }
 
 select {

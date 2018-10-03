@@ -10,7 +10,6 @@ class Stage extends React.Component<any, any> {
     }
 
     render() {
-
         return (
             <SubsitesSection
                 data={Object.keys(this.props.sites.byHash).map((key: string) => {

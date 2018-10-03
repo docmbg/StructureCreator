@@ -11,7 +11,7 @@ interface IPropsType {
     addSite: Function;
 }
 
-class SiteForm extends React.Component<IPropsType, any> {
+class SiteCreatForm extends React.Component<IPropsType, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -113,4 +113,4 @@ function mapDispatchToProps(dispatch: any) {
     return bindActionCreators({ addSite }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SiteForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SiteCreatForm);
