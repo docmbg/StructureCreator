@@ -1,4 +1,4 @@
-import undoable from 'redux-undo';
+import undoable, { includeAction } from 'redux-undo';
 import { ADD_SITE, EDIT_SITE, DELETE_SITE, SET_SITES } from '../consts';
 import { ISite } from '../api/helperFunctions';
 
@@ -13,42 +13,45 @@ interface ISitesState {
 }
 
 function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteAction) {
+    let newState;
     switch (action.type) {
         case ADD_SITE:
-            return {
+            return Object.assign({}, state, {
                 byId: [...state.byId, action.payload.Id],
                 byHash: {
                     ...state.byHash,
                     [action.payload.Id]: action.payload
                 }
-            };
+            });
         case EDIT_SITE:
-            state.byHash[action.payload.Id] = action.payload;
-            return {
+            newState = Object.assign({}, {
                 byId: [...state.byId],
                 byHash: {
                     ...state.byHash
                 }
-            };
+            });
+            newState.byHash[action.payload.Id] = action.payload;
+            return newState;
 
         case DELETE_SITE:
             // delete sites which parent site is this id as well
-            let indexes: Array<number> = [];
-            for (let key of Object.keys(state.byHash)) {
-                if (state.byHash[key].Id === action.payload.Id ||
-                    state.byHash[key].parentSite === action.payload.Id
-                ) {
-                    indexes.push(state.byHash[key].Id);
-                    delete state.byHash[key];
-                }
-            }
-            state.byId = state.byId.filter((e: number) => !indexes.includes(e));
-            return {
+            newState = Object.assign({}, {
                 byId: [...state.byId],
                 byHash: {
                     ...state.byHash
                 }
-            };
+            });
+            let indexes: Array<number> = [];
+            for (let key of Object.keys(newState.byHash)) {
+                if (newState.byHash[key].Id === action.payload.Id ||
+                    newState.byHash[key].parentSite === action.payload.Id
+                ) {
+                    indexes.push(newState.byHash[key].Id);
+                    delete newState.byHash[key];
+                }
+            }
+            newState.byId = state.byId.filter((e: number) => !indexes.includes(e));
+            return newState;
         case SET_SITES:
             console.log(action.payload);
             return action.payload;
@@ -59,7 +62,7 @@ function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteActio
 }
 
 const undoableSites = undoable(sites, {
-    // filter: excludeAction([]),
+    filter: includeAction([ADD_SITE, EDIT_SITE, DELETE_SITE, SET_SITES]),
 });
 
 export default undoableSites;
