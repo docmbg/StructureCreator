@@ -2,12 +2,20 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import editSiteContent from '../actions/edit_site_content_action';
+<<<<<<< HEAD
+=======
+import { ISitesState } from '../reducers/reducer_sites';
+>>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
 import { ISite } from '../api/helperFunctions';
 
 interface IEditSite {
     site: ISite;
     editSiteContent: Function;
+<<<<<<< HEAD
     sites: any;
+=======
+    sites: ISitesState;
+>>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
     contentActiveSite: ISite;
 }
 
@@ -29,7 +37,11 @@ class SiteEditForm extends React.Component<IEditSite, any> {
         });
         let site: ISite = {
             Id: this.state.Id,
+<<<<<<< HEAD
             parentSite: parseInt(this.state.parentSite, 10),
+=======
+            parentSite: this.state.parentSite,
+>>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
             mainUrl: '',
             requestDigest: '',
             info: {
@@ -46,6 +58,10 @@ class SiteEditForm extends React.Component<IEditSite, any> {
             site.info[prop] = value;
         }
         this.props.editSiteContent(site);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
     }
 
     render() {
@@ -99,7 +115,10 @@ function mapStateToProps(state: any) {
         byHash: state.sites.present.byHash
     };
     let contentActiveSite = state.contentActiveSite;
+<<<<<<< HEAD
     sites.byId = sites.byId.filter((e: number) => e !== contentActiveSite.Id);
+=======
+>>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
     return {
         sites,
         contentActiveSite
