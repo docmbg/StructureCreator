@@ -8,7 +8,6 @@ export default class SubsitesContainer extends React.Component<any, any> {
     }
 
     render() {
-        console.log(this.props.data);
         return (
             <div id="siteBadge">
                 {

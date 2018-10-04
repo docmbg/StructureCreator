@@ -2,13 +2,12 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import editSiteContent from '../actions/edit_site_content_action';
-import { ISitesState } from '../reducers/reducer_sites';
 import { ISite } from '../api/helperFunctions';
 
 interface IEditSite {
     site: ISite;
     editSiteContent: Function;
-    sites: ISitesState;
+    sites: any;
     contentActiveSite: ISite;
 }
 
@@ -30,7 +29,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
         });
         let site: ISite = {
             Id: this.state.Id,
-            parentSite: this.state.parentSite,
+            parentSite: parseInt(this.state.parentSite, 10),
             mainUrl: '',
             requestDigest: '',
             info: {
@@ -47,7 +46,6 @@ class SiteEditForm extends React.Component<IEditSite, any> {
             site.info[prop] = value;
         }
         this.props.editSiteContent(site);
-
     }
 
     render() {
@@ -74,7 +72,9 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     value={state.parentSite}
                     onChange={(e) => this.onInputChange('parentSite', parseInt(e.target.value, 10))}
                 >
-                    <option value="" />
+                    <option value={0} >
+                        Home Level
+                    </option>
                     {
                         this.props.sites.byId.map((id: number, i: number) => {
                             return (
@@ -94,11 +94,12 @@ class SiteEditForm extends React.Component<IEditSite, any> {
 }
 
 function mapStateToProps(state: any) {
-    let sites: ISitesState = {
-        byId: state.sites.byId,
-        byHash: state.sites.byHash
+    let sites = {
+        byId: state.sites.present.byId,
+        byHash: state.sites.present.byHash
     };
     let contentActiveSite = state.contentActiveSite;
+    sites.byId = sites.byId.filter((e: number) => e !== contentActiveSite.Id);
     return {
         sites,
         contentActiveSite

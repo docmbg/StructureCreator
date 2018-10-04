@@ -10,10 +10,10 @@ class ReuseStructure extends React.Component<any, any> {
         super(props);
     }
 
-    componentDidMount() {
-        // for faster testing
-        this.props.setSites(JSON.parse(localStorage.getItem('structure')));
-    }
+    // componentDidMount() {
+    //     // for faster testing
+    //     this.props.setSites(JSON.parse(localStorage.getItem('structure')));
+    // }
 
     readStructure() {
         let that = this;
@@ -34,7 +34,7 @@ class ReuseStructure extends React.Component<any, any> {
             <div className="container">
                 <div className="row">
                     <a
-                        href={`data:text/plain;charset=UTF-8,${JSON.stringify(this.props.sites)}`}
+                        href={`data:text/plain;charset=UTF-8,${JSON.stringify(this.props.sites.present)}`}
                         download="Sharepoint Structure"
                     >
                         Download Structure

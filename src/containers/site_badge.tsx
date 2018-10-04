@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import setActiveSite from '../actions/set_active_site_action';
 import editSite from '../actions/edit_site_action';
 import editSiteContent from '../actions/edit_site_content_action';
+import deleteSite from '../actions/delete_site_action';
 import { ISite } from '../api/helperFunctions';
 import { Modal, Button } from 'react-materialize';
 import SiteEditForm from './site_form_edit';
@@ -14,6 +15,7 @@ interface ISIteBadge {
     site: ISite;
     contentActiveSite: ISite;
     editSiteContent: Function;
+    deleteSite: Function;
 }
 
 class SiteBadge extends React.Component<ISIteBadge, any> {
@@ -48,8 +50,14 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
         });
     }
 
+    deleteSite() {
+        const result = confirm('This will permanently delete the site and its subsites, are you sure you want to proceed?');
+        if (result) {
+            this.props.deleteSite(this.props.site);
+        }
+    }
+
     render() {
-        console.log('new props', this.props.site);
         return (
             <div className="site-badge" id="siteBadge">
                 <div className="text">
@@ -78,7 +86,7 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
                         </i>
                     </div>
                     <div>
-                        <i className="material-icons">
+                        <i className="material-icons" onClick={() => this.deleteSite()}>
                             delete_forever
                         </i>
                     </div>
@@ -95,7 +103,7 @@ function mapStateToProps({ contentActiveSite }: any) {
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return bindActionCreators({ setActiveSite, editSite, editSiteContent }, dispatch);
+    return bindActionCreators({ setActiveSite, editSite, editSiteContent, deleteSite }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SiteBadge);
