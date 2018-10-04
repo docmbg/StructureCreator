@@ -1,0 +1,40 @@
+@import 'colors.scss';
+
+.site-badge {
+    width: max-content;
+    display: table;
+    cursor: pointer;
+    .text {
+        float: left;
+        border: 1px solid black;
+        background: #0072c6;
+        color: white;
+        border-radius: 4px;
+        padding: 5px 15px 5px 15px;
+        margin: 2px 10px 7px 10px;
+        -webkit-box-shadow: 3px 3px 0px 1px grey;
+        box-shadow: 3px 3px 0px 1px grey;
+        font-weight: 600;
+    }
+    
+    > .actions {
+        float:left;
+        > div > i {
+            line-height: 1!important;
+            margin-top:10px!important;
+        }
+        >div {
+            display:none;
+            height: max-content;
+            cursor: pointer;
+        }
+        
+    }
+    &:hover {
+        .actions  {
+            >div {
+                display:inline-block;
+            }
+        }
+    }
+}

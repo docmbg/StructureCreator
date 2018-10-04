@@ -20,15 +20,17 @@ class ActiveSite extends React.Component<any, any> {
                 value={this.props.activeSite}
                 onChange={(e) => this.onInputChange(e.target.value)}
             >
-                <option value="" />
+                <option value={0}>
+                    Home Level
+                </option>
                 {
-                    this.props.sites.byId.map((id: number, i: number) => {
+                    this.props.sites.present.byId.map((id: number, i: number) => {
                         return (
                             <option
                                 key={i}
                                 value={id}
                             >
-                                {this.props.sites.byHash[id].info.Title}
+                                {this.props.sites.present.byHash[id].info.Title}
                             </option>
                         );
                     })

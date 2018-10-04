@@ -9,6 +9,7 @@ declare module '*.jpg';
 declare module '*.JPG';
 declare module 'connected-react-router';
 declare module 'react-materialize';
+declare module 'redux-undo';
 declare module "worker-loader!*" {
     class WebpackWorker extends Worker {
       constructor();

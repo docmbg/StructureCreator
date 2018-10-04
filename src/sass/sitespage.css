@@ -24,6 +24,3 @@
       cursor: pointer; }
   .site-badge:hover .actions > div {
     display: inline-block; }
-
-select {
-  display: block !important; }

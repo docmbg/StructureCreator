@@ -4,6 +4,7 @@ import CreateAndEditForm from '../components/create_and_edit_form';
 import Stage from './stage';
 import ReuseStructure from './reuse_structure';
 import ActiveSite from './activeSite';
+import UndoRedo from './undo_redo';
 
 export default class App extends React.Component<any, any> {
 
@@ -28,6 +29,7 @@ export default class App extends React.Component<any, any> {
             <Stage />
           </div>
         </div>
+        <UndoRedo/>
         <ReuseStructure />
       </div>
     );

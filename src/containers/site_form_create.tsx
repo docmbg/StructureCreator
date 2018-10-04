@@ -3,35 +3,35 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import addSite from '../actions/add_site_action';
 import { ISite } from '../api/helperFunctions';
-import { ISitesState } from '../reducers/reducer_sites';
 
 interface IPropsType {
-    sites: ISitesState;
+    sites: any;
     activeSite: string;
     addSite: Function;
 }
 
-class SiteForm extends React.Component<IPropsType, any> {
+class SiteCreatForm extends React.Component<IPropsType, any> {
     constructor(props: any) {
         super(props);
         this.state = {
             siteTitle: '',
             siteURL: '',
             siteTemplate: '',
-            parentSite: undefined,
+            parentSite: 0,
         };
     }
 
-    onInputChange(prop: string, value: string) {
+    onInputChange(prop: string, value: any) {
         this.setState({
             [prop]: value
         });
     }
 
     onAddButtonClick() {
-        const newId = (this.props.sites.byId[this.props.sites.byId.length - 1] + 1) || 0;
+        const newId = (this.props.sites.byId[this.props.sites.byId.length - 1] + 1) || 1;
         let site: ISite = {
             Id: newId,
+            // celta e siteovete bez parent da sa s parentSite NULL; a drugite da s type NUMBER
             parentSite: parseInt(this.state.parentSite, 10),
             mainUrl: '',
             requestDigest: '',
@@ -49,7 +49,7 @@ class SiteForm extends React.Component<IPropsType, any> {
             siteName: '',
             siteURL: '',
             siteTemplate: '',
-            parentSite: '',
+            parentSite: 0,
         });
     }
 
@@ -77,7 +77,9 @@ class SiteForm extends React.Component<IPropsType, any> {
                     value={state.parentSite}
                     onChange={(e) => this.onInputChange('parentSite', e.target.value)}
                 >
-                    <option value="" />
+                    <option value={0} >
+                        Home Level
+                    </option>
                     {
                         this.props.sites.byId.map((id: number, i: number) => {
                             return (
@@ -99,9 +101,9 @@ class SiteForm extends React.Component<IPropsType, any> {
 }
 
 function mapStateToProps(state: any) {
-    let sites: ISitesState = {
-        byId: state.sites.byId,
-        byHash: state.sites.byHash
+    let sites = {
+        byId: state.sites.present.byId,
+        byHash: state.sites.present.byHash
     };
     return {
         sites,
@@ -113,4 +115,4 @@ function mapDispatchToProps(dispatch: any) {
     return bindActionCreators({ addSite }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SiteForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SiteCreatForm);
