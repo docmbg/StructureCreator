@@ -15,22 +15,25 @@ class ActiveSite extends React.Component<any, any> {
     render() {
         return (
             <div>
-            Current Site:
+            Display :
             <select
                 value={this.props.activeSite}
                 onChange={(e) => this.onInputChange(e.target.value)}
             >
+                <option value={-1}>
+                    All Sites
+                </option>
                 <option value={0}>
                     Home Level
                 </option>
                 {
-                    this.props.sites.present.byId.map((id: number, i: number) => {
+                    this.props.sites.byId.map((id: number, i: number) => {
                         return (
                             <option
                                 key={i}
                                 value={id}
                             >
-                                {this.props.sites.present.byHash[id].info.Title}
+                                {this.props.sites.byHash[id].info.Title}
                             </option>
                         );
                     })
@@ -45,7 +48,7 @@ class ActiveSite extends React.Component<any, any> {
 function mapStateToProps({ activeSite, sites }: any) {
     return {
         activeSite,
-        sites
+        sites: sites.present
     };
 }
 

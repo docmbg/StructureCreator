@@ -2,20 +2,12 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import editSiteContent from '../actions/edit_site_content_action';
-<<<<<<< HEAD
-=======
-import { ISitesState } from '../reducers/reducer_sites';
->>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
 import { ISite } from '../api/helperFunctions';
 
 interface IEditSite {
     site: ISite;
     editSiteContent: Function;
-<<<<<<< HEAD
     sites: any;
-=======
-    sites: ISitesState;
->>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
     contentActiveSite: ISite;
 }
 
@@ -32,16 +24,13 @@ class SiteEditForm extends React.Component<IEditSite, any> {
     }
 
     onInputChange(prop: string, value: any) {
+        console.log(value);
         this.setState({
             [prop]: value
         });
         let site: ISite = {
             Id: this.state.Id,
-<<<<<<< HEAD
             parentSite: parseInt(this.state.parentSite, 10),
-=======
-            parentSite: this.state.parentSite,
->>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
             mainUrl: '',
             requestDigest: '',
             info: {
@@ -58,32 +47,27 @@ class SiteEditForm extends React.Component<IEditSite, any> {
             site.info[prop] = value;
         }
         this.props.editSiteContent(site);
-<<<<<<< HEAD
-=======
-
->>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
     }
 
     render() {
         const state = this.state;
         return (
             <div>
-                Site Name
+                <label>Site Name</label>
                 <input
                     value={state.Title}
                     onChange={(e) => this.onInputChange('Title', e.target.value)}
                 />
-                Site URL
                 <br />
-                {`https://mainUrl/`}
+                <label>Site Url</label>
+                
                 <input
                     value={state.Url}
                     onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
-                Site Template
+                <label>Site Template</label>
                 <select />
-
-                Parent Site
+                <label>Parent Site</label>
                 <select
                     value={state.parentSite}
                     onChange={(e) => this.onInputChange('parentSite', parseInt(e.target.value, 10))}
@@ -115,10 +99,7 @@ function mapStateToProps(state: any) {
         byHash: state.sites.present.byHash
     };
     let contentActiveSite = state.contentActiveSite;
-<<<<<<< HEAD
     sites.byId = sites.byId.filter((e: number) => e !== contentActiveSite.Id);
-=======
->>>>>>> 6370b9635fe2f7f6920f0fdb974d855df518bdfb
     return {
         sites,
         contentActiveSite
