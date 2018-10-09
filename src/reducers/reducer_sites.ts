@@ -7,9 +7,9 @@ interface ISiteAction {
     payload: ISite;
 }
 
-interface ISitesState {
+export interface ISitesState {
     byId: Array<number>;
-    byHash: Object;
+    byHash: any;
 }
 
 function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteAction) {

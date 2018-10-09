@@ -24,3 +24,13 @@
       cursor: pointer; }
   .site-badge:hover .actions > div {
     display: inline-block; }
+
+.action {
+  font-weight: 600;
+  line-height: 0.2; }
+  .action.edit {
+    color: #0072c6; }
+  .action.add {
+    color: green; }
+  .action.delete {
+    color: red; }

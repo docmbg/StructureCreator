@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import setActiveSite from '../actions/set_active_site_action';
 import editSite from '../actions/edit_site_action';
 import editSiteContent from '../actions/edit_site_content_action';
 import deleteSite from '../actions/delete_site_action';
@@ -10,7 +9,6 @@ import { Modal, Button } from 'react-materialize';
 import SiteEditForm from './site_form_edit';
 
 interface ISIteBadge {
-    setActiveSite: Function;
     editSite: Function;
     site: ISite;
     contentActiveSite: ISite;
@@ -66,7 +64,7 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
                 <div className="actions">
                     <Modal
                         modalOptions={{ dismissible: false }}
-                        header="Modal Header"
+                        header={this.props.site.info.Title}
                         open={this.state.modalOpened}
                         actions={
                             <div>
@@ -103,7 +101,7 @@ function mapStateToProps({ contentActiveSite }: any) {
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return bindActionCreators({ setActiveSite, editSite, editSiteContent, deleteSite }, dispatch);
+    return bindActionCreators({ editSite, editSiteContent, deleteSite }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SiteBadge);

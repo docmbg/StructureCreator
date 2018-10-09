@@ -25,5 +25,25 @@
   .site-badge:hover .actions > div {
     display: inline-block; }
 
+.action {
+  font-weight: 600;
+  line-height: 0.2; }
+  .action.edit {
+    color: #0072c6; }
+  .action.add {
+    color: green; }
+  .action.delete {
+    color: red; }
+
+.modal {
+  border-radius: 5px;
+  width: 20% !important; }
+  .modal .btn {
+    background: #0072c6;
+    margin-left: 10px !important; }
+  .modal input:focus {
+    border-bottom: 1px solid #0072c6 !important;
+    box-shadow: 0 1px 0 0 #0072c6 !important; }
+
 select {
   display: block !important; }

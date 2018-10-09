@@ -1,10 +1,11 @@
 import { postOptions } from '../consts';
+import { ISitesState } from '../reducers/reducer_sites';
 
 export interface ISiteInfo {
     metadata: any; // { 'type': 'SP.WebCreationInformation' }
     Title: string;
     Url: string;
-    WebTemlate: string;
+    WebTemplate: string;
     UseSamePermissionsAsParentSite: boolean;
 }
 
@@ -31,6 +32,40 @@ export interface ITopNavNode extends IInfo {
     info: INavNodeInfo;
 }
 
+export function transformToUseableSites(sites: any) {
+    console.log(sites);
+    let readyToUseSites = {
+        byId: new Array(),
+        byHash: {},
+    };
+    sites = sites.map((e: any, i: number) => { e.Id = i + 1; return e; });
+    for (var site of sites) {
+
+        for (var siteSecond of sites) {
+            site.parentSite = siteSecond.children.includes(site.url) ? siteSecond.Id : 0;
+            if (site.parentSite !== 0) {
+                break;
+            }
+        }
+        readyToUseSites.byId.push(site.Id);
+        readyToUseSites.byHash[site.Id] = {
+            Id: site.Id,
+            parentSite: site.parentSite,
+            mainUrl: '',
+            requestDigest: '',
+            info: {
+                metadata: { 'type': 'SP.WebCreationInformation' },
+                Title: site.title,
+                Url: site.url,
+                WebTemplate: site.WebTemplate,
+                UseSamePermissionsAsParentSite: true,
+
+            }
+        };
+    }
+    return readyToUseSites;
+}
+
 export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: string, options: any) {
     let promises: any = [];
     let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs?$expand=webs`;
@@ -41,7 +76,8 @@ export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: s
         arr.push({
             url: mainUrl,
             title: mainSite.d.Title,
-            children: mainSite.d.Webs.results.length
+            children: mainSite.d.Webs.results.map((e: any) => e.Url),
+            WebTemplate: mainSite.d.WebTemplate,
         });
     }
     await fetch(fetchUrl, options).then(res => res.json())
@@ -51,7 +87,8 @@ export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: s
                 arr.push({
                     url: e.Url,
                     title: e.Title,
-                    children: e.Webs.results.length
+                    children: e.Webs.results.map((child: any) => child.Url),
+                    WebTemplate: e.WebTemplate,
                 });
                 promises.push(getAllSubSites(`${e[`__metadata`][`uri`]}/webs?$expand=webs`, arr, mainUrl, options));
 
@@ -152,6 +189,55 @@ function createPostInfo(body: any, requestDigest: string, type: string) {
     return postInfo;
 }
 
+export function compareStructures(oldStructure: ISitesState, newStructure: ISitesState) {
+    let changes = [];
+    console.log(newStructure, oldStructure);
+    // inspect for new entries;
+    for (let newId of newStructure.byId) {
+        // inspect for updates;
+        if (oldStructure.byId.includes(newId)) {
+            if (oldStructure.byHash[newId].info.Title !== newStructure.byHash[newId].info.Title) {
+                changes.push(
+                    {
+                        type: 'action edit',
+                        text: `Site '${oldStructure.byHash[newId].info.Title}' renamed to '${newStructure.byHash[newId].info.Title}'`
+                    }
+                );
+            }
+            if (oldStructure.byHash[newId].info.Url !== newStructure.byHash[newId].info.Url) {
+                changes.push(
+                    {
+                        type: 'action edit',
+                        text: `Site URL of '${oldStructure.byHash[newId].info.Title}' changed to '${newStructure.byHash[newId].info.Url}'`
+                    }
+                );
+            }
+        } else {
+            changes.push(
+                {
+                    type: 'action add',
+                    text: `New site named: '${newStructure.byHash[newId].info.Title}'`
+                }
+            );
+        }
+    }
+    // inspect for deleted items;
+    for (let oldId of oldStructure.byId) {
+        if (!newStructure.byId.includes(oldId)) {
+            changes.push(
+                {
+                    type: 'action delete',
+                    text: `Removed a site named: '${oldStructure.byHash[oldId].info.Title}'`
+                }
+            );
+        }
+    }
+    if (changes.length === 0) {
+        changes = [{ text: 'You made no changes to the initial structure', type: 'none' }];
+    }
+    return changes;
+}
+
 /* API functions to be created
 - get all list templates `https://dxcportal.sharepoint.com/sites/DOCMNewCo/_api/web/listtemplates`;
 - get all site templates `https://dxcportal.sharepoint.com/sites/DOCMNewCo/_api/web/
@@ -204,5 +290,22 @@ then(res=> res.json()).then(res=> console.log(res));
   },
   success: successHandler,
   error: errorHandler
+
+-update site.!!! CAN CHANGE EVEN URL
+
+var postOptions = {
+    method: 'POST', // or 'PUT'
+    headers: {
+        'Accept': 'application/json; odata=verbose',
+        'content-type': 'application/json;odata=verbose',
+		'X-RequestDigest': digest,
+    "X-HTTP-Method": "MERGE"
+
+    },
+	body: JSON.stringify({ '__metadata': { 'type': 'SP.Web' }, 'ServerRelativeUrl': '/sites/DOCMNewCo/Mad/test' }),
+}
+undefined
+fetch(`https://dxcportal.sharepoint.com/sites/DOCMNewCo/Calendars/test/_api/web`, 
+postOptions).then(res=>res.json()).then(res=>console.log(res))
 
 */

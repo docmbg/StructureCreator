@@ -6,6 +6,7 @@ export const EDIT_SITE = 'EDIT_SITE';
 export const DELETE_SITE = 'DELETE_SITE';
 export const SET_SITES = 'SET_SITES';
 export const SET_EDIT_SITE_CONTENT = 'SET_EDIT_SITE_CONTENT';
+export const SET_SITES_ORIGIN = 'SET_SITES_ORIGIN';
 
 export const readOptions = {
     method: 'GET', // or 'PUT'

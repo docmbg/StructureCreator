@@ -39,7 +39,7 @@ class SiteCreatForm extends React.Component<IPropsType, any> {
                 metadata: { 'type': 'SP.WebCreationInformation' },
                 Title: this.state.siteTitle,
                 Url: this.state.siteURL,
-                WebTemlate: this.state.siteTemplate,
+                WebTemplate: this.state.siteTemplate,
                 UseSamePermissionsAsParentSite: true,
             }
 

@@ -38,3 +38,17 @@
         }
     }
 }
+
+.action {
+    font-weight:600;
+    line-height: 0.2;
+    &.edit {
+        color: $sharepoint-blue;
+    }
+    &.add {
+        color: green;
+    }
+    &.delete {
+        color: red;
+    }
+}

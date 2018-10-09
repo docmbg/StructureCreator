@@ -18,12 +18,13 @@ class SiteEditForm extends React.Component<IEditSite, any> {
             Id: this.props.contentActiveSite.Id,
             Title: this.props.contentActiveSite.info.Title,
             Url: this.props.contentActiveSite.info.Url,
-            WebTemplate: this.props.contentActiveSite.info.WebTemlate,
+            WebTemplate: this.props.contentActiveSite.info.WebTemplate,
             parentSite: this.props.contentActiveSite.parentSite
         };
     }
 
     onInputChange(prop: string, value: any) {
+        console.log(value);
         this.setState({
             [prop]: value
         });
@@ -36,7 +37,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                 metadata: { 'type': 'SP.WebCreationInformation' },
                 Title: this.state.Title,
                 Url: this.state.Url,
-                WebTemlate: this.state.WebTemplate,
+                WebTemplate: this.state.WebTemplate,
                 UseSamePermissionsAsParentSite: true,
             }
         };
@@ -52,22 +53,21 @@ class SiteEditForm extends React.Component<IEditSite, any> {
         const state = this.state;
         return (
             <div>
-                Site Name
+                <label>Site Name</label>
                 <input
                     value={state.Title}
                     onChange={(e) => this.onInputChange('Title', e.target.value)}
                 />
-                Site URL
                 <br />
-                {`https://mainUrl/`}
+                <label>Site Url</label>
+                
                 <input
                     value={state.Url}
                     onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
-                Site Template
+                <label>Site Template</label>
                 <select />
-
-                Parent Site
+                <label>Parent Site</label>
                 <select
                     value={state.parentSite}
                     onChange={(e) => this.onInputChange('parentSite', parseInt(e.target.value, 10))}

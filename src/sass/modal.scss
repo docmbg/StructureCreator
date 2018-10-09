@@ -1,0 +1,14 @@
+@import 'colors.scss';
+
+.modal {
+    border-radius:5px;
+    width: 20%!important;
+    & .btn {
+        background: $sharepoint-blue;
+        margin-left:10px!important;
+    }
+    & input:focus {
+        border-bottom: 1px solid $sharepoint-blue!important;
+        box-shadow: 0 1px 0 0 $sharepoint-blue!important;
+    }
+}
