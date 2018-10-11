@@ -1,4 +1,4 @@
-// import { getMainUrl } from './api/helperFunctions';
+import { getMainUrl } from './api/helperFunctions';
 
 export const ADD_SITE = 'ADD_SITE';
 export const SET_ACTIVE_SITE = 'SET_ACTIVE_SITE';
@@ -26,5 +26,5 @@ export const postOptions = {
     }
 };
 
-// export const paramUrl = window.location.href.includes('sites') ? 'sites' : 'teams';
-// export const siteUrl = getMainUrl(paramUrl);
+export const paramUrl = window.location.href.includes('sites') ? 'sites' : 'teams';
+export const siteUrl = getMainUrl(paramUrl);

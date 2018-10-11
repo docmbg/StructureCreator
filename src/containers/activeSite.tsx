@@ -15,31 +15,35 @@ class ActiveSite extends React.Component<any, any> {
     render() {
         return (
             <div>
-            Display :
-            <select
-                value={this.props.activeSite}
-                onChange={(e) => this.onInputChange(e.target.value)}
-            >
-                <option value={-1}>
-                    All Sites
-                </option>
-                <option value={0}>
-                    Home Level
-                </option>
-                {
-                    this.props.sites.byId.map((id: number, i: number) => {
-                        return (
-                            <option
-                                key={i}
-                                value={id}
-                            >
-                                {this.props.sites.byHash[id].info.Title}
-                            </option>
-                        );
-                    })
-                }
-                }
-            </select>
+                Display :
+                <select
+                    value={this.props.activeSite}
+                    onChange={(e) => this.onInputChange(e.target.value)}
+                >
+                    <option value={-1}>
+                        All Sites
+                    </option>
+                    <option value={1}>
+                        Home Level ({this.props.sites.byHash[1] ? this.props.sites.byHash[1].info.Title : ''})
+                    </option>
+                    {
+                        this.props.sites.byId.map((id: number, i: number) => {
+                            if (i > 0) {
+                                return (
+                                    <option
+                                        key={i}
+                                        value={id}
+                                    >
+                                        {this.props.sites.byHash[id].info.Title}
+                                    </option>
+                                );
+                            } else {
+                                return true;
+                            }
+                        })
+                    }
+                    }
+                </select>
             </div>
         );
     }

@@ -72,19 +72,23 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     value={state.parentSite}
                     onChange={(e) => this.onInputChange('parentSite', parseInt(e.target.value, 10))}
                 >
-                    <option value={0} >
-                        Home Level
+                    <option value={1} >
+                        Home Level ({this.props.sites.byHash[1] ? this.props.sites.byHash[1].info.Title : ''})
                     </option>
                     {
                         this.props.sites.byId.map((id: number, i: number) => {
-                            return (
-                                <option
-                                    key={i}
-                                    value={id}
-                                >
-                                    {this.props.sites.byHash[id].info.Title}
-                                </option>
-                            );
+                            if (i > 0) {
+                                return (
+                                    <option
+                                        key={i}
+                                        value={id}
+                                    >
+                                        {this.props.sites.byHash[id].info.Title}
+                                    </option>
+                                );
+                            } else {
+                                return true;
+                            }
                         })
                     }
                 </select>

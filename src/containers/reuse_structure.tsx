@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import setSites from '../actions/set_sites_action';
 import setSitesOrigin from '../actions/set_sites_origin_action';
 import { getAllSubSites, transformToUseableSites } from '../api/helperFunctions';
-import { readOptions } from '../consts';
+import { readOptions, siteUrl } from '../consts';
 
 class ReuseStructure extends React.Component<any, any> {
     private fileRef = React.createRef<HTMLInputElement>();
@@ -16,16 +16,16 @@ class ReuseStructure extends React.Component<any, any> {
     componentDidMount() {
         const sites = new Array();
         Promise.resolve(getAllSubSites(
-            'https://dxcportal.sharepoint.com/sites/DOCMNewCo',
-            sites, 'https://dxcportal.sharepoint.com/sites/DOCMNewCo', readOptions)).
+            siteUrl,
+            sites, siteUrl, readOptions)).
             then(res => {
                 const newSites = transformToUseableSites(sites);
                 // two times so we can set it in the past of the reducer, thus making it the default compare value
                 // in the compareStructures paramter, look at stage section, past parameter
                 // passed to changes section
-                this.props.setSites(newSites);
-                this.props.setSites(newSites);
                 this.props.setSitesOrigin('sharepoint');
+                this.props.setSites(newSites);
+                this.props.setSites(newSites);
             });
 
     }
@@ -37,7 +37,16 @@ class ReuseStructure extends React.Component<any, any> {
             const reader = new FileReader();
             reader.onloadend = function (event: any) {
                 const data = JSON.parse(event.target.result);
-                console.log(data);
+                // it's important to keep the main site the same name, as well
+                // as keeping the mainurl the same, not replacing it by the 
+                // incoming structure
+                data.byHash[1].info.Title = that.props.sites.byHash[1].info.Title;
+                // replace all urls with current first url;
+                const toReplace = data.byHash[1].info.Url;
+                for (let key of Object.keys(data.byHash)) {
+                    data.byHash[key].info.Url =
+                        data.byHash[key].info.Url.replace(toReplace, that.props.sites.byHash[1].info.Url);
+                }
                 that.props.setSites(data);
             };
             reader.readAsText(node[`files`][0]);
@@ -67,7 +76,7 @@ class ReuseStructure extends React.Component<any, any> {
 
 function mapStateToProps({ sites }: any) {
     return {
-        sites
+        sites: sites.present
     };
 }
 
