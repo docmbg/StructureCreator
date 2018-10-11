@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 import setSites from '../actions/set_sites_action';
 import setSitesOrigin from '../actions/set_sites_origin_action';
 import { getAllSubSites, transformToUseableSites } from '../api/helperFunctions';
-import { readOptions, siteUrl } from '../consts';
+import { readOptions } from '../consts';
+import { mainUrl } from '../consts';
 
 class ReuseStructure extends React.Component<any, any> {
     private fileRef = React.createRef<HTMLInputElement>();
@@ -16,8 +17,8 @@ class ReuseStructure extends React.Component<any, any> {
     componentDidMount() {
         const sites = new Array();
         Promise.resolve(getAllSubSites(
-            siteUrl,
-            sites, siteUrl, readOptions)).
+            mainUrl,
+            sites, mainUrl, readOptions)).
             then(res => {
                 const newSites = transformToUseableSites(sites);
                 // two times so we can set it in the past of the reducer, thus making it the default compare value
@@ -40,12 +41,15 @@ class ReuseStructure extends React.Component<any, any> {
                 // it's important to keep the main site the same name, as well
                 // as keeping the mainurl the same, not replacing it by the 
                 // incoming structure
-                data.byHash[1].info.Title = that.props.sites.byHash[1].info.Title;
+
+                // data.byHash[1].info.Title = that.props.sites.byHash[1].info.Title;
+
                 // replace all urls with current first url;
-                const toReplace = data.byHash[1].info.Url;
+                // const toReplace = data.byHash[1].info.Url;
                 for (let key of Object.keys(data.byHash)) {
-                    data.byHash[key].info.Url =
-                        data.byHash[key].info.Url.replace(toReplace, that.props.sites.byHash[1].info.Url);
+                    // data.byHash[key].info.Url =
+                    //     data.byHash[key].info.Url.replace(toReplace, that.props.sites.byHash[1].info.Url);
+                    data.byHash[key].mainUrl = mainUrl;
                 }
                 that.props.setSites(data);
             };

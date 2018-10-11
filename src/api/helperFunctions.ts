@@ -156,7 +156,6 @@ export async function updateDigest(url: string) {
     })
         .then(res => res.json())
         .then(res => res.d.GetContextWebInformation.FormDigestValue);
-
     return digest;
 }
 
@@ -191,10 +190,15 @@ function createPostInfo(body: any, requestDigest: string, type: string) {
 
 export function compareStructures(oldStructure: ISitesState, newStructure: ISitesState) {
     let changes = [];
-    console.log(newStructure, oldStructure);
-    // inspect for new entries;
+    const sitesInNewStructure = {
+        toCreate: new Array(),
+        toUpdate: new Array(),
+        toDelete: new Array()
+    };
+    let flagChange = 0;
     for (let newId of newStructure.byId) {
         // inspect for updates;
+        flagChange = 0;
         if (oldStructure.byId.includes(newId)) {
             if (oldStructure.byHash[newId].info.Title !== newStructure.byHash[newId].info.Title) {
                 changes.push(
@@ -203,6 +207,7 @@ export function compareStructures(oldStructure: ISitesState, newStructure: ISite
                         text: `Site '${oldStructure.byHash[newId].info.Title}' renamed to '${newStructure.byHash[newId].info.Title}'`
                     }
                 );
+                flagChange = 1;
             }
             if (oldStructure.byHash[newId].info.Url !== newStructure.byHash[newId].info.Url) {
                 changes.push(
@@ -211,6 +216,10 @@ export function compareStructures(oldStructure: ISitesState, newStructure: ISite
                         text: `Site URL of '${oldStructure.byHash[newId].info.Title}' changed to '${newStructure.byHash[newId].info.Url}'`
                     }
                 );
+                flagChange = 1;
+            }
+            if (flagChange === 1) {
+                sitesInNewStructure.toUpdate.push(newStructure.byHash[newId]);
             }
         } else {
             changes.push(
@@ -219,6 +228,7 @@ export function compareStructures(oldStructure: ISitesState, newStructure: ISite
                     text: `New site named: '${newStructure.byHash[newId].info.Title}'`
                 }
             );
+            sitesInNewStructure.toCreate.push(newStructure.byHash[newId]);
         }
     }
     // inspect for deleted items;
@@ -230,12 +240,37 @@ export function compareStructures(oldStructure: ISitesState, newStructure: ISite
                     text: `Removed a site named: '${oldStructure.byHash[oldId].info.Title}'`
                 }
             );
+            sitesInNewStructure.toDelete.push(oldStructure.byHash[oldId]);
         }
     }
     if (changes.length === 0) {
         changes = [{ text: 'You made no changes to the initial structure', type: 'none' }];
     }
-    return changes;
+    return {
+        changes,
+        sitesInNewStructure,
+    };
+}
+
+export function buildUrl(sites: ISitesState, mainUrl: string, parentSite: number, userInput: string, siteTitle: string) {
+    let finalUrl = '';
+    console.log(`Userinput: ${userInput}, sitetitle: ${siteTitle}, parentSite: ${parentSite}`);
+    if (sites.byHash[parentSite]) {
+        if (userInput === '') {
+            console.log('+title');
+            finalUrl = `${sites.byHash[parentSite].info.Url}/${siteTitle}`;
+        } else {
+            finalUrl = `${sites.byHash[parentSite].info.Url}/${userInput}`;
+        }
+    } else {
+        if (userInput === '') {
+            finalUrl = `${mainUrl}/${userInput}`;
+        } else {
+            finalUrl = `${mainUrl}/${siteTitle}`;
+        }
+    }
+
+    return finalUrl;
 }
 
 /* API functions to be created

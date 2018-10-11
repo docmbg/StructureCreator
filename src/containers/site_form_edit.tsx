@@ -2,7 +2,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import editSiteContent from '../actions/edit_site_content_action';
-import { ISite } from '../api/helperFunctions';
+import { ISite, buildUrl } from '../api/helperFunctions';
+import { mainUrl } from '../consts';
 
 interface IEditSite {
     site: ISite;
@@ -24,29 +25,34 @@ class SiteEditForm extends React.Component<IEditSite, any> {
     }
 
     onInputChange(prop: string, value: any) {
-        console.log(value);
+        let that = this;
         this.setState({
-            [prop]: value
+            [prop]: value,
         });
-        let site: ISite = {
-            Id: this.state.Id,
-            parentSite: parseInt(this.state.parentSite, 10),
-            mainUrl: '',
-            requestDigest: '',
-            info: {
-                metadata: { 'type': 'SP.WebCreationInformation' },
-                Title: this.state.Title,
-                Url: this.state.Url,
-                WebTemplate: this.state.WebTemplate,
-                UseSamePermissionsAsParentSite: true,
-            }
-        };
-        if (site.hasOwnProperty(prop)) {
-            site[prop] = value;
-        } else {
-            site.info[prop] = value;
-        }
-        this.props.editSiteContent(site);
+        setTimeout(
+            function () {
+                let site: ISite = {
+                    Id: that.state.Id,
+                    parentSite: parseInt(that.state.parentSite, 10),
+                    mainUrl,
+                    requestDigest: '',
+                    info: {
+                        metadata: { 'type': 'SP.WebCreationInformation' },
+                        Title: that.state.Title,
+                        Url: buildUrl(that.props.sites, mainUrl, that.state.parentSite, that.state.Url, that.state.Title),
+                        WebTemplate: that.state.WebTemplate,
+                        UseSamePermissionsAsParentSite: true,
+                    }
+                };
+                if (site.hasOwnProperty(prop)) {
+                    site[prop] = value;
+                } else {
+                    site.info[prop] = value;
+                }
+                that.props.editSiteContent(site);
+            }, 
+            1);
+
     }
 
     render() {
@@ -60,7 +66,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                 />
                 <br />
                 <label>Site Url</label>
-                
+
                 <input
                     value={state.Url}
                     onChange={(e) => this.onInputChange('Url', e.target.value)}

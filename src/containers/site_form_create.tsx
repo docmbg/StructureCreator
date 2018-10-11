@@ -2,7 +2,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import addSite from '../actions/add_site_action';
-import { ISite } from '../api/helperFunctions';
+import { ISite, buildUrl } from '../api/helperFunctions';
+import { mainUrl } from '../consts';
 
 interface IPropsType {
     sites: any;
@@ -14,10 +15,10 @@ class SiteCreatForm extends React.Component<IPropsType, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            siteTitle: '',
-            siteURL: '',
-            siteTemplate: '',
-            parentSite: 0,
+            Title: '',
+            Url: '',
+            WebTemplate: '',
+            parentSite: 1,
         };
     }
 
@@ -28,28 +29,29 @@ class SiteCreatForm extends React.Component<IPropsType, any> {
     }
 
     onAddButtonClick() {
+        let that = this;
         const newId = (this.props.sites.byId[this.props.sites.byId.length - 1] + 1) || 1;
         let site: ISite = {
             Id: newId,
             // celta e siteovete bez parent da sa s parentSite NULL; a drugite da s type NUMBER
             parentSite: parseInt(this.state.parentSite, 10),
-            mainUrl: '',
+            mainUrl,
             requestDigest: '',
             info: {
                 metadata: { 'type': 'SP.WebCreationInformation' },
-                Title: this.state.siteTitle,
-                Url: this.state.siteURL,
-                WebTemplate: this.state.siteTemplate,
+                Title: this.state.Title,
+                Url: buildUrl(that.props.sites, mainUrl, that.state.parentSite, that.state.Url, that.state.Title),
+                WebTemplate: this.state.WebTemplate,
                 UseSamePermissionsAsParentSite: true,
             }
 
         };
         this.props.addSite(site, this.state.Title);
         this.setState({
-            siteName: '',
-            siteURL: '',
-            siteTemplate: '',
-            parentSite: 0,
+            Title: '',
+            Url: '',
+            WebTemplate: '',
+            parentSite: 1,
         });
     }
 
@@ -59,15 +61,15 @@ class SiteCreatForm extends React.Component<IPropsType, any> {
             <div>
                 Site Name
                 <input
-                    value={state.siteTitle}
-                    onChange={(e) => this.onInputChange('siteTitle', e.target.value)}
+                    value={state.Title}
+                    onChange={(e) => this.onInputChange('Title', e.target.value)}
                 />
                 Site URL
                 <br />
-                {`https://mainUrl/`}
+                {mainUrl}
                 <input
-                    value={state.siteURL}
-                    onChange={(e) => this.onInputChange('siteURL', e.target.value)}
+                    value={state.Url}
+                    onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
                 Site Template
                 <select />

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ChangesSection from '../components/changes_section';
 import SubsitesSection from '../components/subsites_section';
-// import { ISite } from '../api/helperFunctions';
+import { compareStructures } from '../api/helperFunctions';
 
 class Stage extends React.Component<any, any> {
     constructor(props: any) {
@@ -23,6 +23,11 @@ class Stage extends React.Component<any, any> {
         this.setState({
             changesDisplay: !this.state.changesDisplay
         });
+    }
+
+    createStructure() {
+        let newStructure = compareStructures(this.props.past[1], this.props.sites).sitesInNewStructure;
+        console.log(newStructure, 'new structure');
     }
 
     render() {
@@ -72,7 +77,7 @@ class Stage extends React.Component<any, any> {
                         /> :
                         <div />
                 }
-
+                <button onClick={() => this.createStructure()}>Create new structure</button>
             </div>
 
         );
