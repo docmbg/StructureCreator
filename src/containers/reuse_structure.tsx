@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import setSites from '../actions/set_sites_action';
 import setSitesOrigin from '../actions/set_sites_origin_action';
-import { getAllSubSites, transformToUseableSites } from '../api/helperFunctions';
-import { readOptions } from '../consts';
+// import { getAllSubSites, transformToUseableSites } from '../api/helperFunctions';
+// import { readOptions } from '../consts';
 import { mainUrl } from '../consts';
 
 class ReuseStructure extends React.Component<any, any> {
@@ -14,22 +14,22 @@ class ReuseStructure extends React.Component<any, any> {
         super(props);
     }
 
-    componentDidMount() {
-        const sites = new Array();
-        Promise.resolve(getAllSubSites(
-            mainUrl,
-            sites, mainUrl, readOptions)).
-            then(res => {
-                const newSites = transformToUseableSites(sites);
-                // two times so we can set it in the past of the reducer, thus making it the default compare value
-                // in the compareStructures paramter, look at stage section, past parameter
-                // passed to changes section
-                this.props.setSitesOrigin('sharepoint');
-                this.props.setSites(newSites);
-                this.props.setSites(newSites);
-            });
+    // componentDidMount() {
+    //     const sites = new Array();
+    //     Promise.resolve(getAllSubSites(
+    //         mainUrl,
+    //         sites, mainUrl, readOptions)).
+    //         then(res => {
+    //             const newSites = transformToUseableSites(sites);
+    //             // two times so we can set it in the past of the reducer, thus making it the default compare value
+    //             // in the compareStructures paramter, look at stage section, past parameter
+    //             // passed to changes section
+    //             this.props.setSitesOrigin('sharepoint');
+    //             this.props.setSites(newSites);
+    //             this.props.setSites(newSites);
+    //         });
 
-    }
+    // }
 
     readStructure() {
         let that = this;

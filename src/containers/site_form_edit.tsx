@@ -18,7 +18,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
         this.state = {
             Id: this.props.contentActiveSite.Id,
             Title: this.props.contentActiveSite.info.Title,
-            Url: this.props.contentActiveSite.info.Url,
+            Url: this.props.contentActiveSite.info.Url.split('/')[this.props.contentActiveSite.info.Url.split('/').length - 1],
             WebTemplate: this.props.contentActiveSite.info.WebTemplate,
             parentSite: this.props.contentActiveSite.parentSite
         };
@@ -31,6 +31,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
         });
         setTimeout(
             function () {
+                console.log(buildUrl(that.props.sites, mainUrl, that.state.parentSite, that.state.Url, that.state.Title));
                 let site: ISite = {
                     Id: that.state.Id,
                     parentSite: parseInt(that.state.parentSite, 10),
@@ -50,7 +51,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     site.info[prop] = value;
                 }
                 that.props.editSiteContent(site);
-            }, 
+            },
             1);
 
     }
@@ -65,7 +66,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     onChange={(e) => this.onInputChange('Title', e.target.value)}
                 />
                 <br />
-                <label>Site Url</label>
+                <label>{buildUrl(this.props.sites, mainUrl, this.state.parentSite, this.state.Url, this.state.Title)}</label>
 
                 <input
                     value={state.Url}
