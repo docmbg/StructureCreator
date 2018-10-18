@@ -38,7 +38,7 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     mainUrl,
                     requestDigest: '',
                     info: {
-                        metadata: { 'type': 'SP.WebCreationInformation' },
+                        __metadata: { 'type': 'SP.WebCreationInformation' },
                         Title: that.state.Title,
                         Url: buildUrl(that.props.sites, mainUrl, that.state.parentSite, that.state.Url, that.state.Title),
                         WebTemplate: that.state.WebTemplate,
@@ -72,8 +72,11 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     value={state.Url}
                     onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
-                <label>Site Template</label>
-                <select />
+                <label>Site Permissions</label>
+                <select>
+                    <option value="true">Inherit</option>
+                    <option value="false">Break Inheritance</option>
+                </select>
                 <label>Parent Site</label>
                 <select
                     value={state.parentSite}
