@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ChangesSection from '../components/changes_section';
 import SubsitesSection from '../components/subsites_section';
-import { compareStructures } from '../api/helperFunctions';
+import { compareStructures, orderOfRequests, addMultipleSites, deleteMultipleSites } from '../api/helperFunctions';
 
 class Stage extends React.Component<any, any> {
     constructor(props: any) {
@@ -27,7 +27,15 @@ class Stage extends React.Component<any, any> {
 
     createStructure() {
         let newStructure = compareStructures(this.props.past[1], this.props.sites).sitesInNewStructure;
-        console.log(newStructure, 'new structure');
+        async function executeStructure() {
+            await deleteMultipleSites(orderOfRequests(newStructure.toDelete, true));
+            await addMultipleSites(orderOfRequests(newStructure.toCreate, false));
+            return 1;
+        }
+
+        Promise.resolve(executeStructure()).then(res => {
+            console.log(res);
+        });
     }
 
     render() {

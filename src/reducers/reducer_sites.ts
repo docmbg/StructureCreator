@@ -42,10 +42,12 @@ function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteActio
                 }
             });
             let indexes: Array<number> = [];
+            const compareUrl = newState.byHash[action.payload.Id].info.Url;
             for (let key of Object.keys(newState.byHash)) {
-                if (newState.byHash[key].Id === action.payload.Id ||
-                    newState.byHash[key].parentSite === action.payload.Id
-                ) {
+                console.log(action.payload.Id);
+                console.log(newState.byHash[key].info.Url, );
+                
+                if (newState.byHash[key].info.Url.includes(compareUrl)) {
                     indexes.push(newState.byHash[key].Id);
                     delete newState.byHash[key];
                 }

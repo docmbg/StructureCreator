@@ -1,8 +1,8 @@
-import { postOptions } from '../consts';
+import { postOptions, mainUrl, deleteOptions } from '../consts';
 import { ISitesState } from '../reducers/reducer_sites';
 
 export interface ISiteInfo {
-    metadata: any; // { 'type': 'SP.WebCreationInformation' }
+    __metadata: any; // { 'type': 'SP.WebCreationInformation' }
     Title: string;
     Url: string;
     WebTemplate: string;
@@ -10,7 +10,7 @@ export interface ISiteInfo {
 }
 
 export interface INavNodeInfo {
-    metadata: any; // { type: "SP.NavigationNode" }
+    __metadata: any; // { type: "SP.NavigationNode" }
     IsExternal: boolean;
     Title: string;
     Url: string;
@@ -19,8 +19,9 @@ export interface INavNodeInfo {
 
 export interface IInfo {
     mainUrl: string;
-    requestDigest: string;
+    requestDigest: any;
     parentSite: number;
+    urlLength?: number;
     Id: number;
 }
 
@@ -66,15 +67,15 @@ export function transformToUseableSites(sites: any) {
     return readyToUseSites;
 }
 
-export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: string, options: any) {
+export async function getAllSubSites(url: string, arr: Array<Object>, siteUrl: string, options: any) {
     let promises: any = [];
-    let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs?$expand=webs`;
+    let fetchUrl = url !== siteUrl ? url : `${siteUrl}/_api/Web/webs?$expand=webs`;
     if (arr.length === 0) {
-        let mainSite = await fetch(`${mainUrl}/_api/web?$expand=webs`, options)
+        let mainSite = await fetch(`${siteUrl}/_api/web?$expand=webs`, options)
             .then(res => res.json())
             .then(res => res);
         arr.push({
-            url: mainUrl,
+            url: siteUrl,
             title: mainSite.d.Title,
             children: mainSite.d.Webs.results.map((e: any) => e.Url),
             WebTemplate: mainSite.d.WebTemplate,
@@ -90,7 +91,7 @@ export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: s
                     children: e.Webs.results.map((child: any) => child.Url),
                     WebTemplate: e.WebTemplate,
                 });
-                promises.push(getAllSubSites(`${e[`__metadata`][`uri`]}/webs?$expand=webs`, arr, mainUrl, options));
+                promises.push(getAllSubSites(`${e[`__metadata`][`uri`]}/webs?$expand=webs`, arr, siteUrl, options));
 
             });
         });
@@ -159,8 +160,8 @@ export async function updateDigest(url: string) {
     return digest;
 }
 
-export async function getTopNavigationNodes(mainUrl: string, readOptions: any) {
-    const nodes = await fetch(`${mainUrl}/_api/web/navigation/TopNavigationbar`, readOptions).
+export async function getTopNavigationNodes(siteUrl: string, readOptions: any) {
+    const nodes = await fetch(`${siteUrl}/_api/web/navigation/TopNavigationbar`, readOptions).
         then(res => res.json()).then(res => res.d.results);
     return nodes;
 }
@@ -177,7 +178,45 @@ export async function addSite(config: ISite) {
     const postInfo = createPostInfo(config.info, config.requestDigest, 'site');
     const site = await fetch(`${config.mainUrl}/_api/web/webs/add`, postInfo).
         then(res => true);
+    console.log(`Created Site: ${config.info.Title}`);
     return site;
+}
+
+export async function deleteSite(config: ISite) {
+    const deleteInfo = createDeleteInfo(config.requestDigest);
+    const site = await fetch(`${config.info.Url}/_api/web/`, deleteInfo).
+        then(res => true);
+    console.log(`Deleted Site: ${config.info.Title}`);
+    return site;
+}
+
+export async function addMultipleSites(information: Array<Array<ISite>>) {
+    let promises = [];
+    for (let batch of information) {
+        for (let site of batch) {
+            site.requestDigest = await updateDigest(mainUrl);
+            site.mainUrl = site.info.Url.substring(0, site.info.Url.lastIndexOf('/'));
+            site.info.Url = site.info.Url.substring(site.info.Url.lastIndexOf('/') + 1, site.info.Url.length);
+            site.info.WebTemplate = 'STS#0';
+            promises.push(addSite(site));
+        }
+        await Promise.all(promises);
+        promises = [];
+    }
+    return 1;
+}
+
+export async function deleteMultipleSites(information: Array<Array<ISite>>) {
+    let promises = [];
+    for (let batch of information) {
+        for (let site of batch) {
+            site.requestDigest = await updateDigest(mainUrl);
+            promises.push(deleteSite(site));
+        }
+        await Promise.all(promises);
+        promises = [];
+    }
+    return 1;
 }
 
 function createPostInfo(body: any, requestDigest: string, type: string) {
@@ -186,6 +225,39 @@ function createPostInfo(body: any, requestDigest: string, type: string) {
     postInfo[`body`] = type === 'site' ? JSON.stringify({ parameters: body }) : JSON.stringify(body);
     postInfo[`credentials`] = 'include';
     return postInfo;
+}
+
+function createDeleteInfo(requestDigest: string) {
+    const deleteInfo = deleteOptions;
+    deleteInfo.headers[`X-RequestDigest`] = requestDigest;
+    return deleteInfo;
+}
+
+export function orderOfRequests(information: Array<ISite>, reverse: boolean) {
+    //
+    information.sort((a, b) =>
+        a.info.Url.match(/\//g).length - b.info.Url.match(/\//g).length
+    );
+    let newInfo = reverse ? information.reverse() : information;
+    let groupLengths = new Array();
+    newInfo.map((site: ISite) => {
+        site.urlLength = site.info.Url.match(/\//g).length;
+        if (!groupLengths.includes(site.urlLength)) {
+            groupLengths.push(site.urlLength);
+        }
+        return site;
+    });
+    let groupedRequests = [];
+    for (let entryLength of groupLengths) {
+        let group = new Array();
+        for (let site of newInfo) {
+            if (site.urlLength === entryLength) {
+                group.push(site);
+            }
+        }
+        groupedRequests.push(group);
+    }
+    return groupedRequests;
 }
 
 export function compareStructures(oldStructure: ISitesState, newStructure: ISitesState) {
@@ -252,7 +324,7 @@ export function compareStructures(oldStructure: ISitesState, newStructure: ISite
     };
 }
 
-export function buildUrl(sites: ISitesState, mainUrl: string, parentSite: number, userInput: string, siteTitle: string) {
+export function buildUrl(sites: ISitesState, siteUrl: string, parentSite: number, userInput: string, siteTitle: string) {
     let finalUrl = '';
     console.log(`Userinput: ${userInput}, sitetitle: ${siteTitle}, parentSite: ${parentSite}`);
     if (sites.byHash[parentSite]) {
@@ -264,9 +336,9 @@ export function buildUrl(sites: ISitesState, mainUrl: string, parentSite: number
         }
     } else {
         if (userInput === '') {
-            finalUrl = `${mainUrl}/${userInput}`;
+            finalUrl = `${siteUrl}/${userInput}`;
         } else {
-            finalUrl = `${mainUrl}/${siteTitle}`;
+            finalUrl = `${siteUrl}/${siteTitle}`;
         }
     }
 

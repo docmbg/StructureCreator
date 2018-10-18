@@ -26,5 +26,12 @@ export const postOptions = {
     }
 };
 
+export const deleteOptions = {
+    method: 'POST',
+    headers: {
+        'X-HTTP-Method': 'DELETE'
+    },
+};
+
 export const paramUrl = window.location.href.includes('sites') ? 'sites' : 'teams';
 export const mainUrl = getMainUrl(paramUrl);

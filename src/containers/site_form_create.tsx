@@ -38,7 +38,7 @@ class SiteCreatForm extends React.Component<IPropsType, any> {
             mainUrl,
             requestDigest: '',
             info: {
-                metadata: { 'type': 'SP.WebCreationInformation' },
+                __metadata: { 'type': 'SP.WebCreationInformation' },
                 Title: this.state.Title,
                 Url: buildUrl(that.props.sites, mainUrl, that.state.parentSite, that.state.Url, that.state.Title),
                 WebTemplate: this.state.WebTemplate,
@@ -71,8 +71,11 @@ class SiteCreatForm extends React.Component<IPropsType, any> {
                     value={state.Url}
                     onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
-                Site Template
-                <select />
+                Site Permissions
+                <select >
+                    <option value="true">Inherit</option>
+                    <option value="false">Break Inheritance</option>
+                </select>
 
                 Parent Site
                 <select
