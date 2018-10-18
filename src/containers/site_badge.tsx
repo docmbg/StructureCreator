@@ -38,7 +38,6 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
             },
             10
         );
-
     }
 
     onEditClick() {

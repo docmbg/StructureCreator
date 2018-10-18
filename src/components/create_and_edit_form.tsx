@@ -1,42 +1,56 @@
 import * as React from 'react';
 import SiteForm from '../containers/site_form_create';
-import LibraryForm from '../containers/library_form';
+// import LibraryForm from '../containers/library_form';
 
 export default class CreateAndEditForm extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            form: <SiteForm />,
+            formValue: <SiteForm opened={true} onCloseForm={() => this.onClose()} />,
+            form: ''
         };
     }
 
+    onClose() {
+        this.setState({
+            form: '',
+        });
+    }
+
     switchForm(e: any) {
-        let form;
+        let formValue;
         switch (e.target.value) {
             case 'subsite':
-                form = <SiteForm />;
+                formValue = <SiteForm />;
                 break;
-            case 'library':
-                form = <LibraryForm />;
-                break;
+            // case 'library':
+            //     form = <LibraryForm />;
+            //     break;
             default:
-                form = <div />;
+                formValue = <div />;
         }
         this.setState({
-            form
+            formValue
+        });
+    }
+
+    onButtonClick() {
+        this.setState({
+            form: this.state.formValue
         });
     }
 
     render() {
         return (
             <div>
-                Add a:
+                Choose Type:
                 <select onChange={(e) => this.switchForm(e)}>
                     <option value="subsite" selected={true}>Subsite</option>
-                    <option value="library">Library</option>
+                    {/* <option value="library">Library</option> */}
                 </select>
+                <button onClick={() => this.onButtonClick()}>Add</button>
                 <div>
-                    {this.state.form}
+                    {this.state.form !== '' ? this.state.form : <div />}
                 </div>
             </div>
         );

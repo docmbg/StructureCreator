@@ -19,8 +19,8 @@ class SiteEditForm extends React.Component<IEditSite, any> {
             Id: this.props.contentActiveSite.Id,
             Title: this.props.contentActiveSite.info.Title,
             Url: this.props.contentActiveSite.info.Url.split('/')[this.props.contentActiveSite.info.Url.split('/').length - 1],
-            WebTemplate: this.props.contentActiveSite.info.WebTemplate,
-            parentSite: this.props.contentActiveSite.parentSite
+            parentSite: this.props.contentActiveSite.parentSite,
+            UseSamePermissionsAsParentSite: this.props.contentActiveSite.info.UseSamePermissionsAsParentSite
         };
     }
 
@@ -41,14 +41,18 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                         __metadata: { 'type': 'SP.WebCreationInformation' },
                         Title: that.state.Title,
                         Url: buildUrl(that.props.sites, mainUrl, that.state.parentSite, that.state.Url, that.state.Title),
-                        WebTemplate: that.state.WebTemplate,
-                        UseSamePermissionsAsParentSite: true,
+                        WebTemplate: 'STS#0',
+                        UseSamePermissionsAsParentSite: parseInt(that.state.UseSamePermissionsAsParentSite, 10) === 1,
                     }
                 };
                 if (site.hasOwnProperty(prop)) {
                     site[prop] = value;
                 } else {
-                    site.info[prop] = value;
+                    if (prop = 'UseSamePermissionsAsParentSite') {
+                        site.info[prop] = parseInt(that.state.UseSamePermissionsAsParentSite, 10) === 1;
+                    } else {
+                        site.info[prop] = value;
+                    }
                 }
                 that.props.editSiteContent(site);
             },
@@ -73,9 +77,11 @@ class SiteEditForm extends React.Component<IEditSite, any> {
                     onChange={(e) => this.onInputChange('Url', e.target.value)}
                 />
                 <label>Site Permissions</label>
-                <select>
-                    <option value="true">Inherit</option>
-                    <option value="false">Break Inheritance</option>
+                <select
+                    onChange={(e) => this.onInputChange('UseSamePermissionsAsParentSite', e.target.value)}
+                >
+                    <option value={1}>Inherit</option>
+                    <option value={0}>Break Inheritance</option>
                 </select>
                 <label>Parent Site</label>
                 <select
