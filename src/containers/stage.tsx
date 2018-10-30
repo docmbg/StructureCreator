@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import ChangesSection from '../components/changes_section';
 import SubsitesSection from '../components/subsites_section';
-import { compareStructures, orderOfRequests, addMultipleSites, deleteMultipleSites } from '../api/helperFunctions';
 
 class Stage extends React.Component<any, any> {
     constructor(props: any) {
@@ -16,25 +14,6 @@ class Stage extends React.Component<any, any> {
     onInputChange(value: string) {
         this.setState({
             input: value
-        });
-    }
-
-    onChangesButtonClick() {
-        this.setState({
-            changesDisplay: !this.state.changesDisplay
-        });
-    }
-
-    createStructure() {
-        let newStructure = compareStructures(this.props.past[1], this.props.sites).sitesInNewStructure;
-        async function executeStructure() {
-            await deleteMultipleSites(orderOfRequests(newStructure.toDelete, true));
-            await addMultipleSites(orderOfRequests(newStructure.toCreate, false));
-            return 1;
-        }
-
-        Promise.resolve(executeStructure()).then(res => {
-            console.log(res);
         });
     }
 
@@ -58,7 +37,10 @@ class Stage extends React.Component<any, any> {
         } else {
             data = Object.keys(this.props.sites.byHash).map((key: string) => {
                 return (
-                    this.props.sites.byHash[key].parentSite === this.props.activeSite ?
+                    this.props.sites.byHash[key].parentSite === this.props.activeSite
+                    && 
+                    this.props.sites.byHash[key].info.Title.toLowerCase().includes(that.state.input.toLowerCase())
+                    ?
                         this.props.sites.byHash[key] :
                         false
                 );
@@ -66,26 +48,16 @@ class Stage extends React.Component<any, any> {
         }
         return (
             <div>
-                {
-                    this.props.activeSite === -1 ?
-                        <input onChange={(e: any) => this.onInputChange(e.target.value)} value={this.state.input} /> :
-                        <div />
-                }
-                <SubsitesSection
-                    data={data}
-                />
-                <button onClick={() => this.onChangesButtonClick()}>
-                    {this.state.changesDisplay ? 'Hide Changes' : 'Show Changes'}
-                </button>
-                {
-                    this.state.changesDisplay ?
-                        <ChangesSection
-                            past={this.props.sitesOrigin === 'local' ? this.props.past[0] : this.props.past[1]}
-                            present={this.props.sites}
-                        /> :
-                        <div />
-                }
-                <button onClick={() => this.createStructure()}>Create new structure</button>
+                <div>
+                    <input
+                        placeholder="Search for a site by name"
+                        onChange={(e: any) => this.onInputChange(e.target.value)}
+                        value={this.state.input}
+                    />
+                    <SubsitesSection
+                        data={data}
+                    />
+                </div>
             </div>
 
         );

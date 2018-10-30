@@ -1,18 +1,26 @@
+.batch {
+  float: left; }
+
 .site-badge {
   width: max-content;
   display: table;
-  cursor: pointer; }
+  cursor: pointer;
+  min-width: 15em; }
   .site-badge .text {
+    max-width: 10em;
+    min-width: 10em;
     float: left;
-    border: 1px solid black;
-    background: #0072c6;
-    color: white;
-    border-radius: 4px;
-    padding: 5px 15px 5px 15px;
+    /* border: 1px solid black; */
+    color: black;
+    border-radius: 2px 2px 2px 2px;
+    padding: 12px 10px 10px 15px;
     margin: 2px 10px 7px 10px;
-    -webkit-box-shadow: 3px 3px 0px 1px grey;
-    box-shadow: 3px 3px 0px 1px grey;
-    font-weight: 600; }
+    /* -webkit-box-shadow: 3px 3px 0px 1px grey; */
+    box-shadow: 1px 1px 1px 1px grey;
+    font-weight: 600;
+    height: 3em;
+    /* transform: rotate(45deg); */
+    background: rgba(255, 165, 0, 0.6); }
   .site-badge > .actions {
     float: left; }
     .site-badge > .actions > div > i {
@@ -25,9 +33,12 @@
   .site-badge:hover .actions > div {
     display: inline-block; }
 
+.delete:hover {
+  color: red; }
+
 .action {
   font-weight: 600;
-  line-height: 0.2; }
+  line-height: 1; }
   .action.edit {
     color: #0072c6; }
   .action.add {
@@ -35,15 +46,55 @@
   .action.delete {
     color: red; }
 
+.material-icons {
+  cursor: pointer; }
+  .material-icons.disabled {
+    color: #d9d9d9; }
+
 .modal {
   border-radius: 5px;
-  width: 20% !important; }
+  width: 25% !important;
+  min-height: 70% !important;
+  overflow-y: auto !important; }
   .modal .btn {
-    background: #0072c6;
     margin-left: 10px !important; }
-  .modal input:focus {
-    border-bottom: 1px solid #0072c6 !important;
-    box-shadow: 0 1px 0 0 #0072c6 !important; }
 
 select {
   display: block !important; }
+
+#fileNameInput {
+  float: left; }
+
+.btn {
+  min-width: 100% !important;
+  margin-top: 1em !important;
+  background: darkslateblue;
+  display: block;
+  min-height: fit-content;
+  line-height: 1.7em;
+  padding: 0.5em; }
+  .btn:hover {
+    background: #0072c6; }
+  .btn:focus {
+    background: darkslateblue; }
+
+.undo {
+  min-width: 50% !important;
+  border-radius: 10px 0px 0px 10px;
+  display: inline-block; }
+
+.redo {
+  min-width: 50% !important;
+  border-radius: 0px 10px 10px 0px;
+  display: inline-block; }
+
+#addSite {
+  font-size: 2em;
+  float: left; }
+
+.material-icons {
+  vertical-align: middle; }
+
+input:focus {
+  border-bottom: 1px solid #0072c6 !important;
+  box-shadow: 0 1px 0 0 #0072c6 !important; }

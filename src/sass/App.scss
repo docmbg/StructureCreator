@@ -1,5 +1,51 @@
-@import 'sitespage.scss', 'modal.scss';
+@import 'sitespage.scss', 'modal.scss', 'colors.scss';
 
 select {
   display: block!important;
+}
+
+#fileNameInput {
+  float:left;
+}
+
+.btn {
+  min-width: 100%!important;
+  margin-top: 1em!important;
+  background: darkslateblue;
+  display: block;
+  min-height: fit-content;
+  line-height: 1.7em;
+  padding:0.5em;
+  &:hover {
+    background:$sharepoint-blue;
+  }
+  &:focus {
+    background: darkslateblue;
+  }
+}
+
+.undo {
+  min-width:50%!important;
+  border-radius: 10px 0px 0px 10px;
+  display: inline-block;
+}
+
+.redo {
+  min-width: 50%!important;
+  border-radius: 0px 10px 10px 0px;
+  display: inline-block;
+}
+
+#addSite {
+  font-size: 2em;
+  float: left;
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
+input:focus {
+  border-bottom: 1px solid $sharepoint-blue!important;
+  box-shadow: 0 1px 0 0 $sharepoint-blue!important;
 }

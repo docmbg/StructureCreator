@@ -22,6 +22,7 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
         this.state = {
             modalOpened: false,
             saved: false,
+            counter: 0,
         };
     }
 
@@ -38,7 +39,6 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
             },
             10
         );
-
     }
 
     onEditClick() {
@@ -55,11 +55,55 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
         }
     }
 
+    // componentDidMount() {
+    //     let that = this;
+    //     setInterval(
+    //         function () {
+    //             that.setState({
+    //                 counter: that.state.counter + 1
+    //             });
+    //         }, 
+    //         10
+    //     );
+    // }
+
+    // newColour() {
+    //     let color = '#';
+    //     const options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'A', 'B', 'C', 'D', 'E', 'F'];
+    //     for (let i = 0; i < 6; i++) {
+    //         color += options[Math.round(Math.random() * options.length) - 1];
+    //     }
+    //     return color;
+    // }
+
+    // colorful(text: string) {
+
+    //     let spanStyle;
+    //     const jsxElements = new Array();
+    //     let textSplit = text.split('');
+
+    //     for (let i = 0; i < textSplit.length; i++) {
+    //         spanStyle = {
+    //             color: this.newColour()
+    //         };
+    //         jsxElements.push(<span style={spanStyle}>{textSplit[i]}</span>);
+    //     }
+    //     return jsxElements;
+    // }
+
     render() {
+        // const colorfulSpan = this.colorful(this.props.site.info.Title);
         return (
             <div className="site-badge" id="siteBadge">
                 <div className="text">
-                    {this.props.site.info.Title}
+                    {this.props.site.info.Title.length > 10 ?
+                        `${this.props.site.info.Title.substring(0, 10)}...` :
+                        `${this.props.site.info.Title}`
+                        // colorfulSpan.map(e => {
+                        //     return e;
+                        // })
+
+                    }
                 </div>
                 <div className="actions">
                     <Modal
@@ -67,9 +111,15 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
                         header={this.props.site.info.Title}
                         open={this.state.modalOpened}
                         actions={
-                            <div>
-                                <Button onClick={() => this.closeModal(true)}>Save</Button>
-                                <Button onClick={() => this.closeModal(false)}>Dismiss</Button>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col s6">
+                                        <Button onClick={() => this.closeModal(true)}>Save</Button>
+                                    </div>
+                                    <div className="col s6">
+                                        <Button onClick={() => this.closeModal(false)}>Dismiss</Button>
+                                    </div>
+                                </div>
                             </div>}
                     >
                         {
@@ -84,7 +134,7 @@ class SiteBadge extends React.Component<ISIteBadge, any> {
                         </i>
                     </div>
                     <div>
-                        <i className="material-icons" onClick={() => this.deleteSite()}>
+                        <i className="material-icons delete" onClick={() => this.deleteSite()}>
                             delete_forever
                         </i>
                     </div>

@@ -1,4 +1,4 @@
-import { postOptions, mainUrl, deleteOptions } from '../consts';
+import { postOptions, mainUrl, deleteOptions, paramUrl } from '../consts';
 import { ISitesState } from '../reducers/reducer_sites';
 
 export interface ISiteInfo {
@@ -18,6 +18,7 @@ export interface INavNodeInfo {
 }
 
 export interface IInfo {
+    InitialUrl?: string;
     mainUrl: string;
     requestDigest: any;
     parentSite: number;
@@ -34,7 +35,6 @@ export interface ITopNavNode extends IInfo {
 }
 
 export function transformToUseableSites(sites: any) {
-    console.log(sites);
     let readyToUseSites = {
         byId: new Array(),
         byHash: {},
@@ -58,6 +58,7 @@ export function transformToUseableSites(sites: any) {
                 metadata: { 'type': 'SP.WebCreationInformation' },
                 Title: site.title,
                 Url: site.url,
+                InitialUrl: site.url,
                 WebTemplate: site.WebTemplate,
                 UseSamePermissionsAsParentSite: true,
 
@@ -102,7 +103,6 @@ export async function getAllLists(url: string, options: any, libsOnly: boolean) 
     const getListsUrl = `${url}/_api/Web/Lists/?$expand=Fields, RootFolder, WorkflowAssociations`;
     const lists = await fetch(getListsUrl, options)
         .then(res => {
-            console.log(res.ok, res.status, res.statusText);
             if (!res.ok) {
                 console.log(res.statusText);
             }
@@ -178,7 +178,6 @@ export async function addSite(config: ISite) {
     const postInfo = createPostInfo(config.info, config.requestDigest, 'site');
     const site = await fetch(`${config.mainUrl}/_api/web/webs/add`, postInfo).
         then(res => true);
-    console.log(`Created Site: ${config.info.Title}`);
     return site;
 }
 
@@ -186,7 +185,13 @@ export async function deleteSite(config: ISite) {
     const deleteInfo = createDeleteInfo(config.requestDigest);
     const site = await fetch(`${config.info.Url}/_api/web/`, deleteInfo).
         then(res => true);
-    console.log(`Deleted Site: ${config.info.Title}`);
+    return site;
+}
+
+export async function updateSite(config: ISite) {
+    const postInfo = createUpdateInfo(config.info, config.requestDigest);
+    const site = await fetch(`${config.InitialUrl}/_api/web/`, postInfo).
+        then(res => true);
     return site;
 }
 
@@ -219,10 +224,34 @@ export async function deleteMultipleSites(information: Array<Array<ISite>>) {
     return 1;
 }
 
+export async function updateMultipleSites(information: Array<ISite>) {
+    let promises = [];
+    for (let site of information) {
+        site.requestDigest = await updateDigest(mainUrl);
+        promises.push(updateSite(site));
+    }
+    await Promise.all(promises);
+    return 1;
+}
+
 function createPostInfo(body: any, requestDigest: string, type: string) {
     const postInfo = postOptions;
     postInfo.headers[`X-RequestDigest`] = requestDigest;
     postInfo[`body`] = type === 'site' ? JSON.stringify({ parameters: body }) : JSON.stringify(body);
+    postInfo[`credentials`] = 'include';
+    return postInfo;
+}
+
+function createUpdateInfo(body: any, requestDigest: string) {
+    const postInfo = postOptions;
+    postInfo.headers[`X-RequestDigest`] = requestDigest;
+    postInfo.headers[`X-HTTP-Method`] = 'MERGE';
+    const newBody = {
+        '__metadata': { 'type': 'SP.Web' }
+    };
+    newBody[`ServerRelativeUrl`] = `/${paramUrl}${body.Url.split(paramUrl)[1]}`;
+    newBody[`Title`] = body.Title;
+    postInfo[`body`] = JSON.stringify(newBody);
     postInfo[`credentials`] = 'include';
     return postInfo;
 }
@@ -326,10 +355,8 @@ export function compareStructures(oldStructure: ISitesState, newStructure: ISite
 
 export function buildUrl(sites: ISitesState, siteUrl: string, parentSite: number, userInput: string, siteTitle: string) {
     let finalUrl = '';
-    console.log(`Userinput: ${userInput}, sitetitle: ${siteTitle}, parentSite: ${parentSite}`);
     if (sites.byHash[parentSite]) {
         if (userInput === '') {
-            console.log('+title');
             finalUrl = `${sites.byHash[parentSite].info.Url}/${siteTitle}`;
         } else {
             finalUrl = `${sites.byHash[parentSite].info.Url}/${userInput}`;
@@ -343,6 +370,16 @@ export function buildUrl(sites: ISitesState, siteUrl: string, parentSite: number
     }
 
     return finalUrl;
+}
+
+export function splitIntoBatches(arr: Array<any>, batchSize: number) {
+    const allBatches = [];
+    let counter = 0;
+    while (arr.length > counter) {
+        allBatches.push(arr.slice(counter, counter + batchSize));
+        counter += batchSize;
+    }
+    return allBatches;
 }
 
 /* API functions to be created

@@ -1,22 +1,40 @@
 import * as React from 'react';
 import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import { connect } from 'react-redux';
+
 // import { bindActionCreators } from 'redux';
 
 class UndoRedo extends React.Component<any, any> {
-    componentDidMount () {
+    componentDidMount() {
         this.props.onUndo();
     }
 
     render() {
         return (
             <p>
-                <button onClick={() => this.props.onUndo()} disabled={!this.props.canUndo}>
-                    Undo
-                </button>
-                <button onClick={() => this.props.onRedo()} disabled={!this.props.canRedo}>
-                    Redo
-                </button>
+                <a
+                    title="Undo"
+                    className={`waves-effect waves-black btn undo ${this.props.canUndo === false ? 'disabled' : '0'}`}
+                    onClick={() => this.props.onUndo()}
+                >
+                    <i
+                    
+                        className={`material-icons`}
+                    >
+                        undo
+                    </i>
+                </a>
+                <a
+                    title="Redo"
+                    className={`waves-effect waves-black redo btn ${this.props.canRedo === false ? 'disabled' : '0'}`}
+                    onClick={() => this.props.onRedo()}
+                >
+                    <i
+                        className={`material-icons`}
+                    >
+                        redo
+                    </i>
+                </a>
             </p>
         );
     }

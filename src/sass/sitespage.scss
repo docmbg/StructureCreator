@@ -1,20 +1,27 @@
 @import 'colors.scss';
-
+.batch {
+    float:left;
+};
 .site-badge {
     width: max-content;
     display: table;
     cursor: pointer;
+    min-width:15em;
     .text {
+        max-width: 10em;
+        min-width: 10em;
         float: left;
-        border: 1px solid black;
-        background: #0072c6;
-        color: white;
-        border-radius: 4px;
-        padding: 5px 15px 5px 15px;
+        /* border: 1px solid black; */
+        color: black;
+        border-radius: 2px 2px 2px 2px;
+        padding: 12px 10px 10px 15px;
         margin: 2px 10px 7px 10px;
-        -webkit-box-shadow: 3px 3px 0px 1px grey;
-        box-shadow: 3px 3px 0px 1px grey;
+        /* -webkit-box-shadow: 3px 3px 0px 1px grey; */
+        box-shadow: 1px 1px 1px 1px grey;
         font-weight: 600;
+        height: 3em;
+        /* transform: rotate(45deg); */
+        background: rgba(255,165,0,0.6);
     }
     
     > .actions {
@@ -39,9 +46,13 @@
     }
 }
 
+.delete:hover {
+    color:red;
+}
+
 .action {
     font-weight:600;
-    line-height: 0.2;
+    line-height: 1;
     &.edit {
         color: $sharepoint-blue;
     }
@@ -50,5 +61,12 @@
     }
     &.delete {
         color: red;
+    }
+}
+
+.material-icons {
+    cursor:pointer;
+    &.disabled {
+        color: $dxc-grey;
     }
 }

@@ -14,6 +14,7 @@ export interface ISitesState {
 
 function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteAction) {
     let newState;
+    let compareUrl;
     switch (action.type) {
         case ADD_SITE:
             return Object.assign({}, state, {
@@ -30,6 +31,15 @@ function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteActio
                     ...state.byHash
                 }
             });
+            compareUrl = newState.byHash[action.payload.Id].info.Url;
+            for (let key of Object.keys(newState.byHash)) {      
+                if (newState.byHash[key].info.Url.includes(compareUrl)) {
+                    newState.byHash[key].info.Url = newState.byHash[key].info.Url.replace(
+                        compareUrl,
+                        action.payload.info.Url
+                    );
+                }
+            }
             newState.byHash[action.payload.Id] = action.payload;
             return newState;
 
@@ -42,11 +52,8 @@ function sites(state: ISitesState = { byId: [], byHash: {} }, action: ISiteActio
                 }
             });
             let indexes: Array<number> = [];
-            const compareUrl = newState.byHash[action.payload.Id].info.Url;
-            for (let key of Object.keys(newState.byHash)) {
-                console.log(action.payload.Id);
-                console.log(newState.byHash[key].info.Url, );
-                
+            compareUrl = newState.byHash[action.payload.Id].info.Url;
+            for (let key of Object.keys(newState.byHash)) {                
                 if (newState.byHash[key].info.Url.includes(compareUrl)) {
                     indexes.push(newState.byHash[key].Id);
                     delete newState.byHash[key];

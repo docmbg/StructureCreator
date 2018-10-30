@@ -1,9 +1,7 @@
 .modal {
   border-radius: 5px;
-  width: 20% !important; }
+  width: 25% !important;
+  min-height: 70% !important;
+  overflow-y: auto !important; }
   .modal .btn {
-    background: #0072c6;
     margin-left: 10px !important; }
-  .modal input:focus {
-    border-bottom: 1px solid #0072c6 !important;
-    box-shadow: 0 1px 0 0 #0072c6 !important; }
